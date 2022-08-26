@@ -9,7 +9,7 @@ FileHandler::FileHandler (string path){
 }
 
 //Lee del archivo y arma la matriz
-Matrix FileHandler::loadMatrix(){
+SparseMatrix FileHandler::loadMatrix(){
 	ifstream myFile(fileName.c_str());
 	if (!myFile.is_open()){
 	    cout << "Error leyendo el archivo" << endl;
@@ -18,7 +18,7 @@ Matrix FileHandler::loadMatrix(){
     int matrixSize, linkCount;
     myFile >> matrixSize >> linkCount;
 
-    Matrix outMatrix = Matrix(matrixSize, matrixSize);
+    SparseMatrix outMatrix = SparseMatrix(matrixSize, matrixSize);
     int fromNode, toNode;
     while (myFile >> fromNode >> toNode){
         outMatrix[toNode-1][fromNode-1] += 1;

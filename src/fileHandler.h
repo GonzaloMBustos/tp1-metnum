@@ -9,16 +9,16 @@ using namespace std;
 
 class FileHandler {
 
-private:
-	string fileName;
+    private:
+	    string fileName;
 
-public:
+    public:
 
-	//Constructor
-	FileHandler (string path);
+	    //Constructor
+	    FileHandler (string path);
 	
-	//Lee del archivo y arma la matriz
-	Matrix loadMatrix();
+	    //Lee del archivo y arma la matriz
+	    SparseMatrix loadMatrix();
 };
 
 #endif /* FILEHANDLER_H */
