@@ -6,7 +6,7 @@ using namespace std;
 struct Node
 {
 	double data;
-	int column;
+	unsigned int column;
 	Node *next;
 };
 
@@ -26,7 +26,7 @@ public:
 		epsilon = e;
 	}
 
-	void setValue(double d, int c)
+	void setValue(double d, unsigned int c)
 	{
 		if (c > maxSize)
 		{
@@ -200,7 +200,7 @@ public:
 	}
 
 	// este operador tiene la precondicion de que c tiene que estar dentro del rango de columnas posibles
-	double operator[](int c)
+	double operator[](unsigned int c)
 	{
 		Node *curr = head;
 		while (curr != NULL)
