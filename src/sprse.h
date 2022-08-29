@@ -8,7 +8,7 @@ using namespace std;
 class SprseMatrix
 {
 private:
-	vector<LinkedList> *matrix;
+	vector<LinkedList> matrix;
 	unsigned int rows;
 	unsigned int columns;
 	int epsilon;
@@ -20,22 +20,21 @@ public:
 		rows = r;
 		columns = c;
 		epsilon = e;
-		vector<LinkedList> m(r, LinkedList(c, e));
-		matrix = &m;
+		LinkedList l = LinkedList(c, e);
+		vector<LinkedList> m(r, l);
+		matrix = m;
 	}
 
 	void setValue(double value, unsigned int row, unsigned int col)
 	{
-		LinkedList r = (*matrix)[row];
-		r.setValue(value, col);
-		r.display();
+		matrix[row].setValue(value, col);
 	}
 
 	void display()
 	{
 		for (int i = 0; i < rows; i++)
 		{
-			LinkedList r = (*matrix)[i];
+			LinkedList r = matrix[i];
 			r.display();
 		}
 	}

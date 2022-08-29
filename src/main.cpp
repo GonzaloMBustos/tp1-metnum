@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     // SparseMatrix testMatrix2 = myFile.loadMatrix();
     // testMatrix2.showMatrix(cout);
     SprseMatrix sm(5, 5, 0.0001);
-    sm.setValue(1, 3, 3);
+    sm.setValue(1, 2, 3);
     sm.setValue(1, 3, 4);
 
     sm.display();
