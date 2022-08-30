@@ -4,23 +4,8 @@
 #include <iostream>
 using namespace std;
 
-// MAIN:
-int main(int argc, char *argv[])
+void basicTesting()
 {
-
-    // SparseMatrix testMatrix = SparseMatrix(2, 2);
-    // testMatrix[0][0] = 1;
-    // testMatrix[0][1] = 2;
-    // testMatrix[1][0] = 3;
-    // testMatrix[1][1] = 4;
-
-    // cout << "Size: " << testMatrix.Columns() << " x " << testMatrix.Rows() << endl;
-
-    // testMatrix.showMatrix(cout);
-
-    // FileHandler myFile = FileHandler("../tests/test_aleatorio_desordenado.txt");
-    // SparseMatrix testMatrix2 = myFile.loadMatrix();
-    // testMatrix2.showMatrix(cout);
     SprseMatrix sm(2, 2, 0.0001);
     sm.setValue(2, 1, 1);
     sm.setValue(0, 1, 2);
@@ -42,6 +27,10 @@ int main(int argc, char *argv[])
     cout << "--------------Matriz 1 * Matriz 2--------------" << endl;
     sm *sm2;
     sm.display();
+
+    cout << "++++++++++++Actually stored values inside matrix+++++++++++++++" << endl;
+    sm.getMatrix()[0].display();
+    sm.getMatrix()[1].display();
 
     SprseMatrix sm3b31(3, 3, 0.0001);
     sm3b31.setValue(2, 1, 1);
@@ -120,6 +109,49 @@ int main(int argc, char *argv[])
     cout << "--------------Matriz 1 * Matriz 2--------------" << endl;
     sm4b41 *sm4b42;
     sm4b41.display();
+
+    SprseMatrix sm2b2(2, 2, 0.0001);
+    sm2b2.setValue(1, 1, 1);
+    sm2b2.setValue(0, 1, 2);
+    sm2b2.setValue(0, 2, 1);
+    sm2b2.setValue(1, 2, 2);
+
+    cout << "--------------Matriz 1 de 2x2--------------" << endl;
+    sm2b2.display();
+
+    SprseMatrix sm2b22(2, 2, 0.0001);
+    sm2b22.setValue(1, 1, 1);
+    sm2b22.setValue(1, 1, 2);
+    sm2b22.setValue(1, 2, 1);
+    sm2b22.setValue(1, 2, 2);
+
+    cout << "--------------Matriz 2 de 2x2--------------" << endl;
+    sm2b22.display();
+
+    cout << "==============Matrix sum===================" << endl;
+    sm2b2 + sm2b22;
+    sm2b2.display();
+}
+
+// MAIN:
+int main(int argc, char *argv[])
+{
+
+    // SparseMatrix testMatrix = SparseMatrix(2, 2);
+    // testMatrix[0][0] = 1;
+    // testMatrix[0][1] = 2;
+    // testMatrix[1][0] = 3;
+    // testMatrix[1][1] = 4;
+
+    // cout << "Size: " << testMatrix.Columns() << " x " << testMatrix.Rows() << endl;
+
+    // testMatrix.showMatrix(cout);
+
+    // FileHandler myFile = FileHandler("../tests/test_aleatorio_desordenado.txt");
+    // SparseMatrix testMatrix2 = myFile.loadMatrix();
+    // testMatrix2.showMatrix(cout);
+
+    basicTesting();
 
     return 0;
 }

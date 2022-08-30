@@ -11,11 +11,11 @@ private:
 	vector<LinkedList> matrix;
 	unsigned int rows;
 	unsigned int columns;
-	int epsilon;
+	double epsilon;
 
 public:
 	// PRECOND: R == C
-	SprseMatrix(unsigned int r, unsigned int c, int e)
+	SprseMatrix(unsigned int r, unsigned int c, double e)
 	{
 		rows = r;
 		columns = c;
@@ -92,6 +92,23 @@ public:
 			{
 				setValue(res[i], row + 1, i + 1);
 			}
+		}
+	}
+
+	void multiplyByScalar(double d)
+	{
+		for (int i = 0; i < rows; i++)
+		{
+			matrix[i].multiplyByScalar(d);
+		}
+	}
+
+	void operator+(SprseMatrix m)
+	{
+		vector<LinkedList> mtx = m.getMatrix();
+		for (int i = 0; i < rows; i++)
+		{
+			matrix[i] + mtx[i];
 		}
 	}
 };

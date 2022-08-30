@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 
 using namespace std;
 
@@ -74,6 +75,7 @@ public:
 					if (abs(d) < epsilon)
 					{
 						remove(current, prev);
+						return;
 					}
 					else
 					{
@@ -168,6 +170,7 @@ public:
 	}
 
 	// Operador +
+	// Capaz con Kahan/SIMD se puede hacer la suma mas rapido
 	void operator+(LinkedList l)
 	{
 		if (l.getMaxSize() != maxSize)
