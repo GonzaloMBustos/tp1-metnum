@@ -126,20 +126,24 @@ public:
 		{
 			head = NULL;
 			tail = NULL;
+			curr = NULL;
 		}
 		else if (prev == NULL)
 		{
 			head = curr->next;
+			curr = NULL;
 			printf("head->data: %f\n", head->data);
 		}
 		else if (curr->next == NULL)
 		{
 			prev->next = NULL;
 			tail = prev;
+			curr = NULL;
 		}
 		else
 		{
 			prev->next = curr->next;
+			curr = NULL;
 		}
 		delete curr;
 	}

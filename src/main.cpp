@@ -133,11 +133,11 @@ void basicTesting()
     sm2b2.display();
 }
 
-void EG(SprseMatrix A, vector<double> &b)
+void EG(SprseMatrix *A, vector<double> &b)
 {
-    vector<LinkedList> matrix = A.getMatrix();
-    unsigned int rows = A.getRows();
-    double e = A.getEpsilon();
+    vector<LinkedList> matrix = (*A).getMatrix();
+    unsigned int rows = (*A).getRows();
+    double e = (*A).getEpsilon();
     for (int i = 0; i < rows; i++)
     {
         double mii = matrix[i][i + 1];
@@ -157,9 +157,9 @@ void EG(SprseMatrix A, vector<double> &b)
                 double value = matrix[j][k + 1] - m * matrix[i][k + 1];
                 printf("m=%f, Setting (%d, %d) = %f\n", m, j + 1, k + 1, value);
                 printf("%f = %f - %f * %f\n", value, matrix[j][k + 1], m, matrix[i][k + 1]);
-                A.setValue(value, j + 1, k + 1);
+                (*A).setValue(value, j + 1, k + 1);
                 cout << "---------------setval------------------" << endl;
-                A.display();
+                (*A).display();
                 cout << "---------------------------------------" << endl;
             }
             b[j] = b[j] - m * b[i];
@@ -169,6 +169,24 @@ void EG(SprseMatrix A, vector<double> &b)
 
 void EGTesting()
 {
+    // SprseMatrix sm(4, 4, 0.0001);
+    // sm.setValue(1, 1, 1);
+    // sm.setValue(2, 1, 2);
+    // sm.setValue(1, 1, 3);
+    // sm.setValue(1, 1, 4);
+    // sm.setValue(2, 2, 1);
+    // sm.setValue(1, 2, 2);
+    // sm.setValue(3, 2, 3);
+    // sm.setValue(1, 2, 4);
+    // sm.setValue(1, 3, 1);
+    // sm.setValue(1, 3, 2);
+    // sm.setValue(0, 3, 3);
+    // sm.setValue(0, 3, 4);
+    // sm.setValue(0, 4, 1);
+    // sm.setValue(1, 4, 2);
+    // sm.setValue(1, 4, 3);
+    // sm.setValue(2, 4, 4);
+
     // SprseMatrix sm(3, 3, 0.0001);
     // sm.setValue(2, 1, 1);
     // sm.setValue(1, 1, 2);
@@ -188,7 +206,7 @@ void EGTesting()
 
     cout << "==============matrix before triangulation==============" << endl;
     sm.display();
-    // sm.getMatrix()[1].display();
+    sm.getMatrix()[1].display();
 
     // vector<LinkedList> matrix = sm.getMatrix();
 
@@ -203,7 +221,7 @@ void EGTesting()
     // sm.display();
 
     // cout << "==============resulting vector before triangulation==============" << endl;
-    vector<double> b(3, 2);
+    vector<double> b(2, 2);
     // cout << "[";
     // for (int i = 0; i < b.size(); i++)
     // {
@@ -211,7 +229,7 @@ void EGTesting()
     // }
     // cout << "]" << endl;
 
-    EG(sm, b);
+    EG(&sm, b);
 
     cout << "==============matrix after triangulation==============" << endl;
     sm.display();

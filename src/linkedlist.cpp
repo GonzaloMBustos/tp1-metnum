@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
 
 	LinkedList l(6, 0.0001);
 	l.setValue(1, 2);
-	l.setValue(1, 3);
-	l.setValue(1, 4);
+	l.setValue(2, 3);
+	l.setValue(3, 4);
 	l.setValue(0, 5);
 
 	// LinkedList l2(6, 0.0001);
@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
 
 	// l + l2;
 	l.display();
-	l.setValue(0, 1);
-	l.display();
+	// l.setValue(0, 1);
+	// l.display();
 	// cout << "l[5] = " << l[5] << endl;
 
 	return 0;
