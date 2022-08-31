@@ -67,6 +67,11 @@ public:
 		return matrix;
 	}
 
+	double getEpsilon()
+	{
+		return epsilon;
+	}
+
 	void operator*(SprseMatrix m2)
 	{
 		if (columns != m2.getRows())

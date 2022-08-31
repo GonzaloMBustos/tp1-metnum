@@ -133,6 +133,98 @@ void basicTesting()
     sm2b2.display();
 }
 
+void EG(SprseMatrix A, vector<double> &b)
+{
+    vector<LinkedList> matrix = A.getMatrix();
+    unsigned int rows = A.getRows();
+    double e = A.getEpsilon();
+    for (int i = 0; i < rows; i++)
+    {
+        double mii = matrix[i][i + 1];
+        if (abs(mii) < e)
+        {
+            cout << "there's a zero in the diagonal" << endl;
+            return;
+        }
+        for (int j = i + 1; j < rows; j++)
+        {
+            printf("calculating m = %f / %f\n", matrix[j][i + 1], mii);
+            matrix[j].display();
+            double m = matrix[j][i + 1] / mii;
+            for (int k = i; k < rows; k++)
+            {
+                matrix[j].display();
+                double value = matrix[j][k + 1] - m * matrix[i][k + 1];
+                printf("m=%f, Setting (%d, %d) = %f\n", m, j + 1, k + 1, value);
+                printf("%f = %f - %f * %f\n", value, matrix[j][k + 1], m, matrix[i][k + 1]);
+                A.setValue(value, j + 1, k + 1);
+                cout << "---------------setval------------------" << endl;
+                A.display();
+                cout << "---------------------------------------" << endl;
+            }
+            b[j] = b[j] - m * b[i];
+        }
+    }
+}
+
+void EGTesting()
+{
+    // SprseMatrix sm(3, 3, 0.0001);
+    // sm.setValue(2, 1, 1);
+    // sm.setValue(1, 1, 2);
+    // sm.setValue(3, 1, 3);
+    // sm.setValue(1, 2, 1);
+    // sm.setValue(4, 2, 2);
+    // sm.setValue(3, 2, 3);
+    // sm.setValue(2, 3, 1);
+    // sm.setValue(2, 3, 2);
+    // sm.setValue(1, 3, 3);
+
+    SprseMatrix sm(2, 2, 0.0001);
+    sm.setValue(2, 1, 1);
+    sm.setValue(1, 1, 2);
+    sm.setValue(1, 2, 1);
+    sm.setValue(4, 2, 2);
+
+    cout << "==============matrix before triangulation==============" << endl;
+    sm.display();
+    // sm.getMatrix()[1].display();
+
+    // vector<LinkedList> matrix = sm.getMatrix();
+
+    // double value = matrix[1][1] - 0.5 * matrix[0][1];
+    // cout << "value:" << value << endl;
+    // sm.setValue(value, 2, 1);
+    // value = matrix[1][2] - 0.5 * matrix[0][2];
+    // sm.setValue(value, 2, 2);
+    // value = matrix[1][3] - 0.5 * matrix[0][3];
+    // sm.setValue(value, 2, 3);
+
+    // sm.display();
+
+    // cout << "==============resulting vector before triangulation==============" << endl;
+    vector<double> b(3, 2);
+    // cout << "[";
+    // for (int i = 0; i < b.size(); i++)
+    // {
+    //     cout << b[i] << ", ";
+    // }
+    // cout << "]" << endl;
+
+    EG(sm, b);
+
+    cout << "==============matrix after triangulation==============" << endl;
+    sm.display();
+
+    // cout << "==============resulting vector after triangulation==============" << endl;
+    // cout << "[";
+    // for (int i = 0; i < b.size(); i++)
+    // {
+    //     cout << b[i] << ", ";
+    // }
+    // cout << "]" << endl;
+}
+
 // MAIN:
 int main(int argc, char *argv[])
 {
@@ -151,7 +243,9 @@ int main(int argc, char *argv[])
     // SparseMatrix testMatrix2 = myFile.loadMatrix();
     // testMatrix2.showMatrix(cout);
 
-    basicTesting();
+    // basicTesting();
+
+    EGTesting();
 
     return 0;
 }

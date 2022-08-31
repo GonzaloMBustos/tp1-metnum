@@ -130,6 +130,7 @@ public:
 		else if (prev == NULL)
 		{
 			head = curr->next;
+			printf("head->data: %f\n", head->data);
 		}
 		else if (curr->next == NULL)
 		{
