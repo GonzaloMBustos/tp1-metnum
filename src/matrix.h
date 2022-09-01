@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
 
 using namespace std;
 
@@ -37,6 +38,7 @@ protected:
     vector<vector<double>> grid;
     unsigned int rows;
     unsigned int cols;
+    double epsilon;
 
     // inicializo la matriz con ceros
     void zero_fill();
@@ -46,7 +48,7 @@ protected:
 
 public:
     // Constructor
-    Matrix(unsigned int rows, unsigned int columns);
+    Matrix(unsigned int rows, unsigned int columns, double epsilon);
 
     virtual double getValue(unsigned int row, unsigned int col) = 0;
     virtual void setValue(unsigned int row, unsigned int col, double value) = 0;
@@ -62,6 +64,10 @@ public:
 
     // Operador []
     MatrixRow operator[](int row);
+
+    virtual void operator *(Matrix& aMatrix);
+
+    virtual void operator +(Matrix& aMatrix);
 };
 // IMPLEMENTACION "CLASICA" DE MATRIZ
 class GridMatrix : public Matrix
@@ -73,7 +79,7 @@ protected:
 public:
     virtual double getValue(unsigned int row, unsigned int col) override;
     virtual void setValue(unsigned int row, unsigned int col, double value) override;
-    GridMatrix(unsigned int rows, unsigned int cols);
+    GridMatrix(unsigned int rows, unsigned int cols, double epsilon);
 };
 
 // IMPLEMENTACION PARA MATRICES RALAS, FUNCIONA SIMILAR AL FORMATO DE LOS ARCHIVOS (SOLO GUARDA INFORMACION DE LAS CELDAS OCUPADAS)
@@ -95,7 +101,27 @@ protected:
 public:
     virtual double getValue(unsigned int row, unsigned int col) override;
     virtual void setValue(unsigned int row, unsigned int col, double value) override;
-    SparseMatrix(unsigned int rows, unsigned int cols);
+    SparseMatrix(unsigned int rows, unsigned int cols, double epsilon);
+};
+
+class SparseMatrixReloaded: public Matrix{
+    protected:
+		struct ListNode{
+			double data;
+			unsigned int column;
+			ListNode(double data, unsigned int column): data(data), column(column){}
+		};
+        vector<list<ListNode>> matrix;
+        SparseMatrixReloaded getTransposedMatrix();
+        list<ListNode>::iterator findNodePosition(unsigned int row, unsigned int column);
+        virtual void initialize() override;
+
+    public:
+        virtual double getValue(unsigned int row, unsigned int col) override;
+        virtual void setValue(unsigned int row, unsigned int col, double value) override;
+        virtual void operator +(SparseMatrixReloaded& aMatrix);
+        virtual void operator *(SparseMatrixReloaded& aMatrix);
+        SparseMatrixReloaded(unsigned int rows, unsigned int cols, double epsilon);
 };
 
 #endif /* MATRIX_H */
