@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 #include "matrix.h"
 
 // LO QUE ESTA ABAJO ES PARA QUE FUNCIONEN LOS BRACKETS CON CUALQUIER IMPLEMENTACION INTERNA (Matriz[i][j])
@@ -88,6 +89,36 @@ void Matrix::operator+(Matrix& aMatrix){
     for (unsigned int i = 1; i <= this->rows; i++){
         for (unsigned int j = 1; j <= this->cols; j++){
             (*this)[i][j] += aMatrix[i][j];
+        }
+    }
+}
+
+void Matrix::EG(vector<double>& B){
+    for (unsigned int i = 1; i <= this->rows; i++)
+    {
+        double mii = (*this)[i][i];
+        if (abs(mii) < this->epsilon)
+        {
+            cout << "there's a zero in the diagonal" << endl;
+            return;
+        }
+        for (unsigned int j = i + 1; j <= this->rows; j++)
+        {
+            //printf("calculating m = %f / %f\n", double((*this)[j][i]), mii);
+            //this->showMatrix(cout);
+            double m = (*this)[j][i] / mii;
+            for (unsigned int k = i; k <= this->rows; k++)
+            {
+                //this->showMatrix(cout);
+                double value = (*this)[j][k] - m * (*this)[i][k];
+                //printf("m=%f, Setting (%d, %d) = %f\n", m, j, k, value);
+                //printf("%f = %f - %f * %f\n", value, double((*this)[j][k]), m, double((*this)[i][k]));
+                (*this)[j][k] = value;
+                //cout << "---------------setval------------------" << endl;
+                //this->showMatrix(cout);
+                //cout << "---------------------------------------" << endl;
+            }
+            B[j-1] = B[j-1] - m * B[i-1];
         }
     }
 }
@@ -219,7 +250,6 @@ void SparseMatrixReloaded::initialize()
 }
 
 list<SparseMatrixReloaded::ListNode>::iterator SparseMatrixReloaded::findNodePosition(unsigned int row, unsigned int column){
-
     for (list<SparseMatrixReloaded::ListNode>::iterator it = this->matrix[row].begin(); it != this->matrix[row].end(); it++){
         if (column <= it->column){
             return it;
@@ -243,7 +273,7 @@ void SparseMatrixReloaded::setValue(unsigned int row, unsigned int col, double v
     list<ListNode>::iterator nodePosition = this->findNodePosition(row, col);
     bool nodeExists = (nodePosition != this->matrix[row].end() && nodePosition->column == col);
 
-    if (value < this->epsilon){
+    if (abs(value) < this->epsilon){
         if (nodeExists){	// Existe y es 0: Lo borro
             this->matrix[row].erase(nodePosition);
         }
@@ -270,7 +300,7 @@ void SparseMatrixReloaded::operator+(SparseMatrixReloaded& aMatrix)
                 it1++;
             }else{
                 it1->data += it2->data;     // Ambas matrices tienen un elemento en i,j, lo sumo y modifico la matriz 1, avanzo ambas columnas
-                if (it1->data < this->epsilon){
+                if (abs(it1->data) < this->epsilon){
                     it1 = this->matrix[row].erase(it1); // Si el resultado es 0 (segun el epsilon) borro el elemento (matriz 1)
                 }else{
                     it1++;
@@ -312,14 +342,14 @@ void SparseMatrixReloaded::operator*(SparseMatrixReloaded& aMatrix){
                     it2++;
                 }else{  // M1(ij) != 0 y M2(ij) != 0
                     partial += it1->data * it2->data;
-                    if (partial < this->epsilon){   // TODO: ESTO ESTA BIEN??
+                    if (abs(partial) < this->epsilon){   // TODO: ESTO ESTA BIEN??
                         partial = 0;
                     }
                     it1++;
                     it2++;
                 }
             }
-            if (partial > epsilon){
+            if (abs(partial) > epsilon){
                 tmp.emplace_back(partial, j);
             }
         }
@@ -327,3 +357,57 @@ void SparseMatrixReloaded::operator*(SparseMatrixReloaded& aMatrix){
     }
 }
 
+
+void SparseMatrixReloaded::EG(vector<double>& B){
+    for (unsigned int i = 0; i < this->rows; i++)
+    {
+        list<SparseMatrixReloaded::ListNode>::iterator miiIt = this->findNodePosition(i, i);
+        if (miiIt == this->matrix[i].end() || miiIt->column != i)   // No lo encontro => es 0
+        {
+            cout << "there's a zero in the diagonal" << endl;
+            return;
+        }
+        double mii = miiIt->data;
+        for (unsigned int j = i + 1; j < this->rows; j++)
+        {
+            list<SparseMatrixReloaded::ListNode>::iterator mjxIt = this->findNodePosition(j, i);
+            list<SparseMatrixReloaded::ListNode>::iterator mixIt = miiIt;
+            if (mjxIt == this->matrix[j].end() || mjxIt->column != i){  // Ya es 0 => 0/mii = 0 => filaJ - 0 * filaI = filaJ
+                continue;
+            }
+
+            double m = mjxIt->data / mii;
+            if (abs(m) < this->epsilon){    // m = 0, mismo razonamiento q arriba
+                continue;
+            }
+
+            while(mixIt != this->matrix[i].end() && mjxIt != this->matrix[j].end()){
+                if (mjxIt->column < mixIt->column){ // Si llego aca es porque mix = 0 => mjx = mjx - m * 0 = mjx, avanzo mjx
+                    mjxIt++;
+                    continue;
+                }
+                if (mjxIt->column > mixIt->column){ // Si llego aca, entonces mjx = 0 agrego un nuevo nodo en 0 (temporalmente en 0, mirar abajo!)
+                    mjxIt = this->matrix[j].emplace(mjxIt, 0, mixIt->column);
+                }
+                double value = mjxIt->data - m * mixIt->data;
+                if (abs(value) <= this->epsilon){   // Si el nuevo valor es 0 lo borro
+                    mjxIt = this->matrix[j].erase(mjxIt);
+                }else{
+                    mjxIt->data = value;            // Asigno el nuevo valor (mirar aca!)
+                    mjxIt++;
+                }
+                mixIt++;
+
+                
+            }
+            while(mixIt != this->matrix[i].end()){  // Si llego aca es porque todos los demas mjx son 0 => mjx = 0 - m * mix
+                double value = 0 - m * mixIt->data;
+                if (abs(value) > this->epsilon){    // Siempre tengo que agregar un nodo al final (porque mjx es 0 y mix va en orden creciente)
+                    this->matrix[j].emplace_back(value, mixIt->column);
+                }
+                mixIt++;
+            }
+            B[j] = B[j] - m * B[i];
+        }
+    }
+}

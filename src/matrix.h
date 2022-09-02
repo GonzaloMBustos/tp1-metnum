@@ -68,6 +68,8 @@ public:
     virtual void operator *(Matrix& aMatrix);
 
     virtual void operator +(Matrix& aMatrix);
+
+    virtual void EG(vector<double>& B);
 };
 // IMPLEMENTACION "CLASICA" DE MATRIZ
 class GridMatrix : public Matrix
@@ -121,6 +123,7 @@ class SparseMatrixReloaded: public Matrix{
         virtual void setValue(unsigned int row, unsigned int col, double value) override;
         virtual void operator +(SparseMatrixReloaded& aMatrix);
         virtual void operator *(SparseMatrixReloaded& aMatrix);
+        virtual void EG(vector<double> & B) override;
         SparseMatrixReloaded(unsigned int rows, unsigned int cols, double epsilon);
 };
 
