@@ -1,4 +1,4 @@
-// #include "matrix.h"
+#include "matrix.h"
 #include "sprse.h"
 // #include "fileHandler.h"
 #include <iostream>
@@ -6,241 +6,157 @@ using namespace std;
 
 void basicTesting()
 {
-    SprseMatrix sm(2, 2, 0.0001);
-    sm.setValue(2, 1, 1);
-    sm.setValue(0, 1, 2);
-    sm.setValue(0, 2, 1);
-    sm.setValue(2, 2, 2);
+    SparseMatrixReloaded sm(2, 2, 0.0001);
+    
+    sm[1][1] = 2;
+    sm[1][2] = 0;
+    sm[2][1] = 0;
+    sm[2][2] = 2;
+
 
     cout << "--------------Matriz 1 de 2x2--------------" << endl;
-    sm.display();
+    sm.showMatrix(cout);
 
-    SprseMatrix sm2(2, 2, 0.0001);
-    sm2.setValue(3, 1, 1);
-    sm2.setValue(0, 1, 2);
-    sm2.setValue(0, 2, 1);
-    sm2.setValue(2, 2, 2);
+    SparseMatrixReloaded sm2(2, 2, 0.0001);
+    sm2[1][1] = 3;
+    sm2[1][2] = 0;
+    sm2[2][1] = 0;
+    sm2[2][2] = 2;
 
     cout << "--------------Matriz 2 de 2x2--------------" << endl;
-    sm2.display();
+    sm2.showMatrix(cout);
 
     cout << "--------------Matriz 1 * Matriz 2--------------" << endl;
     sm *sm2;
-    sm.display();
+    
+    sm.showMatrix(cout);
 
-    cout << "++++++++++++Actually stored values inside matrix+++++++++++++++" << endl;
-    sm.getMatrix()[0].display();
-    sm.getMatrix()[1].display();
 
-    SprseMatrix sm3b31(3, 3, 0.0001);
-    sm3b31.setValue(2, 1, 1);
-    sm3b31.setValue(1, 1, 2);
-    sm3b31.setValue(0, 1, 3);
-    sm3b31.setValue(1, 2, 1);
-    sm3b31.setValue(1, 2, 2);
-    sm3b31.setValue(3, 2, 3);
-    sm3b31.setValue(0, 3, 1);
-    sm3b31.setValue(0, 3, 2);
-    sm3b31.setValue(1, 3, 3);
+
+    SparseMatrixReloaded sm3b31(3, 3, 0.0001);
+    sm3b31[1][1] = 2;
+    sm3b31[1][2] = 1;
+    sm3b31[1][3] = 0;
+    sm3b31[2][1] = 1;
+    sm3b31[2][2] = 1;
+    sm3b31[2][3] = 3;
+    sm3b31[3][1] = 0;
+    sm3b31[3][2] = 0;
+    sm3b31[3][3] = 1;
 
     cout << "==============Matriz 1 de 3x3==============" << endl;
-    sm3b31.display();
-
-    SprseMatrix sm3b32(3, 3, 0.0001);
-    sm3b32.setValue(2, 1, 1);
-    sm3b32.setValue(1, 1, 2);
-    sm3b32.setValue(0, 1, 3);
-    sm3b32.setValue(1, 2, 1);
-    sm3b32.setValue(1, 2, 2);
-    sm3b32.setValue(3, 2, 3);
-    sm3b32.setValue(0, 3, 1);
-    sm3b32.setValue(0, 3, 2);
-    sm3b32.setValue(1, 3, 3);
+    sm3b31.showMatrix(cout);;
+    
+    SparseMatrixReloaded sm3b32(3, 3, 0.0001);
+    sm3b32[1][1] = 2;
+    sm3b32[1][2] = 1;
+    sm3b32[1][3] = 0;
+    sm3b32[2][1] = 1;
+    sm3b32[2][2] = 1;
+    sm3b32[2][3] = 3;
+    sm3b32[3][1] = 0;
+    sm3b32[3][2] = 0;
+    sm3b32[3][3] = 1;
 
     cout << "==============Matriz 2 de 3x3==============" << endl;
-    sm3b32.display();
+    sm3b32.showMatrix(cout);;
 
     cout << "--------------Matriz 1 * Matriz 2--------------" << endl;
     sm3b31 *sm3b32;
-    sm3b31.display();
+    sm3b31.showMatrix(cout);
 
-    SprseMatrix sm4b41(4, 4, 0.0001);
-    sm4b41.setValue(2, 1, 1);
-    sm4b41.setValue(1, 1, 2);
-    sm4b41.setValue(0, 1, 3);
-    sm4b41.setValue(1, 1, 4);
-    sm4b41.setValue(1, 2, 1);
-    sm4b41.setValue(1, 2, 2);
-    sm4b41.setValue(2, 2, 3);
-    sm4b41.setValue(3, 2, 4);
-    sm4b41.setValue(0, 3, 1);
-    sm4b41.setValue(0, 3, 2);
-    sm4b41.setValue(1, 3, 3);
-    sm4b41.setValue(1, 3, 4);
-    sm4b41.setValue(0, 4, 1);
-    sm4b41.setValue(3, 4, 2);
-    sm4b41.setValue(1, 4, 3);
-    sm4b41.setValue(1, 4, 4);
+    SparseMatrixReloaded sm4b41(4, 4, 0.0001);
+    sm4b41[1][1] = 2;
+    sm4b41[1][2] = 1;
+    sm4b41[1][3] = 0;
+    sm4b41[1][4] = 1;
+    sm4b41[2][1] = 1;
+    sm4b41[2][2] = 1;
+    sm4b41[2][3] = 2;
+    sm4b41[2][4] = 3;
+    sm4b41[3][1] = 0;
+    sm4b41[3][2] = 0;
+    sm4b41[3][3] = 1;
+    sm4b41[3][4] = 1;
+    sm4b41[4][1] = 1;
+    sm4b41[4][2] = 0;
+    sm4b41[4][3] = 3;
+    sm4b41[4][4] = 1;
 
     cout << "==============Matriz 1 de 4x4==============" << endl;
-    sm4b41.display();
+    sm4b41.showMatrix(cout);
 
-    SprseMatrix sm4b42(4, 4, 0.0001);
-    sm4b42.setValue(2, 1, 1);
-    sm4b42.setValue(1, 1, 2);
-    sm4b42.setValue(0, 1, 3);
-    sm4b42.setValue(2, 1, 4);
-    sm4b42.setValue(1, 2, 1);
-    sm4b42.setValue(1, 2, 2);
-    sm4b42.setValue(3, 2, 3);
-    sm4b42.setValue(3, 2, 4);
-    sm4b42.setValue(0, 3, 1);
-    sm4b42.setValue(4, 3, 2);
-    sm4b42.setValue(1, 3, 3);
-    sm4b42.setValue(1, 3, 4);
-    sm4b42.setValue(0, 4, 1);
-    sm4b42.setValue(1, 4, 2);
-    sm4b42.setValue(2, 4, 3);
-    sm4b42.setValue(1, 4, 4);
+    SparseMatrixReloaded sm4b42(4, 4, 0.0001);
+    sm4b42[1][1] = 2;
+    sm4b42[1][2] = 1;
+    sm4b42[1][3] = 0;
+    sm4b42[1][4] = 2;
+    sm4b42[2][1] = 1;
+    sm4b42[2][2] = 1;
+    sm4b42[2][3] = 3;
+    sm4b42[2][4] = 3;
+    sm4b42[3][1] = 0;
+    sm4b42[3][2] = 4;
+    sm4b42[3][3] = 1;
+    sm4b42[3][4] = 1;
+    sm4b42[4][1] = 0;
+    sm4b42[4][2] = 1;
+    sm4b42[4][3] = 2;
+    sm4b42[4][4] = 1;
 
     cout << "==============Matriz 2 de 4x4==============" << endl;
-    sm4b42.display();
+    sm4b42.showMatrix(cout);
 
     cout << "--------------Matriz 1 * Matriz 2--------------" << endl;
     sm4b41 *sm4b42;
-    sm4b41.display();
+    sm4b41.showMatrix(cout);
+    //vector<double> b = {0,0,0,0};
+    //sm4b41.EG(b);
 
-    SprseMatrix sm2b2(2, 2, 0.0001);
-    sm2b2.setValue(1, 1, 1);
-    sm2b2.setValue(0, 1, 2);
-    sm2b2.setValue(0, 2, 1);
-    sm2b2.setValue(1, 2, 2);
+
+    SparseMatrixReloaded sm2b2(2, 2, 0.0001);
+    sm2b2[1][1] = 1;
+    sm2b2[1][2] = 0;
+    sm2b2[2][1] = 0;
+    sm2b2[2][2] = 1;
 
     cout << "--------------Matriz 1 de 2x2--------------" << endl;
-    sm2b2.display();
+    sm2b2.showMatrix(cout);
 
-    SprseMatrix sm2b22(2, 2, 0.0001);
-    sm2b22.setValue(1, 1, 1);
-    sm2b22.setValue(1, 1, 2);
-    sm2b22.setValue(1, 2, 1);
-    sm2b22.setValue(1, 2, 2);
+    SparseMatrixReloaded sm2b22(2, 2, 0.0001);
+    sm2b22[1][1] = 2;
+    sm2b22[1][2] = 1;
+    sm2b22[2][1] = 1;
+    sm2b22[2][2] = 4;
 
     cout << "--------------Matriz 2 de 2x2--------------" << endl;
-    sm2b22.display();
+    sm2b22.showMatrix(cout);
+
+    vector<double> b = {0,0};
+    sm2b22.EG(b);
+    sm2b22.showMatrix(cout);
 
     cout << "==============Matrix sum===================" << endl;
     sm2b2 + sm2b22;
-    sm2b2.display();
-}
+    sm2b2.showMatrix(cout);
 
-void EG(SprseMatrix *A, vector<double> &b)
-{
-    vector<LinkedList> matrix = (*A).getMatrix();
-    unsigned int rows = (*A).getRows();
-    double e = (*A).getEpsilon();
-    for (int i = 0; i < rows; i++)
-    {
-        double mii = matrix[i][i + 1];
-        if (abs(mii) < e)
-        {
-            cout << "there's a zero in the diagonal" << endl;
-            return;
-        }
-        for (int j = i + 1; j < rows; j++)
-        {
-            printf("calculating m = %f / %f\n", matrix[j][i + 1], mii);
-            matrix[j].display();
-            double m = matrix[j][i + 1] / mii;
-            for (int k = i; k < rows; k++)
-            {
-                matrix[j].display();
-                double value = matrix[j][k + 1] - m * matrix[i][k + 1];
-                printf("m=%f, Setting (%d, %d) = %f\n", m, j + 1, k + 1, value);
-                printf("%f = %f - %f * %f\n", value, matrix[j][k + 1], m, matrix[i][k + 1]);
-                (*A).setValue(value, j + 1, k + 1);
-                cout << "---------------setval------------------" << endl;
-                (*A).display();
-                cout << "---------------------------------------" << endl;
-            }
-            b[j] = b[j] - m * b[i];
-        }
-    }
-}
 
-void EGTesting()
-{
-    // SprseMatrix sm(4, 4, 0.0001);
-    // sm.setValue(1, 1, 1);
-    // sm.setValue(2, 1, 2);
-    // sm.setValue(1, 1, 3);
-    // sm.setValue(1, 1, 4);
-    // sm.setValue(2, 2, 1);
-    // sm.setValue(1, 2, 2);
-    // sm.setValue(3, 2, 3);
-    // sm.setValue(1, 2, 4);
-    // sm.setValue(1, 3, 1);
-    // sm.setValue(1, 3, 2);
-    // sm.setValue(0, 3, 3);
-    // sm.setValue(0, 3, 4);
-    // sm.setValue(0, 4, 1);
-    // sm.setValue(1, 4, 2);
-    // sm.setValue(1, 4, 3);
-    // sm.setValue(2, 4, 4);
+    sm3b32[1][1] = 2;
+    sm3b32[1][2] = 1;
+    sm3b32[1][3] = 3;
+    sm3b32[2][1] = 2;
+    sm3b32[2][2] = 2;
+    sm3b32[2][3] = 3;
+    sm3b32[3][1] = 2;
+    sm3b32[3][2] = 3;
+    sm3b32[3][3] = 0;
+    sm3b32.showMatrix(cout);
 
-    // SprseMatrix sm(3, 3, 0.0001);
-    // sm.setValue(2, 1, 1);
-    // sm.setValue(1, 1, 2);
-    // sm.setValue(3, 1, 3);
-    // sm.setValue(1, 2, 1);
-    // sm.setValue(4, 2, 2);
-    // sm.setValue(3, 2, 3);
-    // sm.setValue(2, 3, 1);
-    // sm.setValue(2, 3, 2);
-    // sm.setValue(1, 3, 3);
-
-    SprseMatrix sm(2, 2, 0.0001);
-    sm.setValue(2, 1, 1);
-    sm.setValue(1, 1, 2);
-    sm.setValue(1, 2, 1);
-    sm.setValue(4, 2, 2);
-
-    cout << "==============matrix before triangulation==============" << endl;
-    sm.display();
-    sm.getMatrix()[1].display();
-
-    // vector<LinkedList> matrix = sm.getMatrix();
-
-    // double value = matrix[1][1] - 0.5 * matrix[0][1];
-    // cout << "value:" << value << endl;
-    // sm.setValue(value, 2, 1);
-    // value = matrix[1][2] - 0.5 * matrix[0][2];
-    // sm.setValue(value, 2, 2);
-    // value = matrix[1][3] - 0.5 * matrix[0][3];
-    // sm.setValue(value, 2, 3);
-
-    // sm.display();
-
-    // cout << "==============resulting vector before triangulation==============" << endl;
-    vector<double> b(2, 2);
-    // cout << "[";
-    // for (int i = 0; i < b.size(); i++)
-    // {
-    //     cout << b[i] << ", ";
-    // }
-    // cout << "]" << endl;
-
-    EG(&sm, b);
-
-    cout << "==============matrix after triangulation==============" << endl;
-    sm.display();
-
-    // cout << "==============resulting vector after triangulation==============" << endl;
-    // cout << "[";
-    // for (int i = 0; i < b.size(); i++)
-    // {
-    //     cout << b[i] << ", ";
-    // }
-    // cout << "]" << endl;
+    vector<double> b2 = {1,2,4.5};
+    sm3b32.EG(b2);
+    sm3b32.showMatrix(cout);
+    cout << "[" << b2[0] << ", " << b2[1] << ", " << b2[2] << "]" << endl;
+    
 }
 
 // MAIN:
@@ -261,9 +177,8 @@ int main(int argc, char *argv[])
     // SparseMatrix testMatrix2 = myFile.loadMatrix();
     // testMatrix2.showMatrix(cout);
 
-    // basicTesting();
-
-    EGTesting();
+    basicTesting();
 
     return 0;
 }
+
