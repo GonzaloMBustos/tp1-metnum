@@ -10,7 +10,7 @@ FileHandler::FileHandler(string path)
 }
 
 // Lee del archivo y arma la matriz
-SparseMatrix FileHandler::loadMatrix()
+SparseMatrixReloaded FileHandler::loadMatrix()
 {
     ifstream myFile(fileName.c_str());
     if (!myFile.is_open())
@@ -21,7 +21,7 @@ SparseMatrix FileHandler::loadMatrix()
     int matrixSize, linkCount;
     myFile >> matrixSize >> linkCount;
 
-    SparseMatrix outMatrix = SparseMatrix(matrixSize, matrixSize);
+    SparseMatrixReloaded outMatrix = SparseMatrixReloaded(matrixSize, matrixSize, 0.0001);
     int fromNode, toNode;
     while (myFile >> fromNode >> toNode)
     {

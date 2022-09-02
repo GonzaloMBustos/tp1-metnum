@@ -18,7 +18,7 @@ class FileHandler {
 	    FileHandler (string path);
 	
 	    //Lee del archivo y arma la matriz
-	    SparseMatrix loadMatrix();
+	    SparseMatrixReloaded loadMatrix();
 };
 
 #endif /* FILEHANDLER_H */

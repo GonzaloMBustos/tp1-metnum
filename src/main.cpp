@@ -1,5 +1,4 @@
 #include "matrix.h"
-#include "sprse.h"
 // #include "fileHandler.h"
 #include <iostream>
 using namespace std;
@@ -141,6 +140,7 @@ void basicTesting()
     sm2b2.showMatrix(cout);
 
 
+    cout << "==============Matriz de 3x3===================" << endl;
     sm3b32[1][1] = 2;
     sm3b32[1][2] = 1;
     sm3b32[1][3] = 3;
@@ -153,10 +153,12 @@ void basicTesting()
     sm3b32.showMatrix(cout);
 
     vector<double> b2 = {1,2,4.5};
+    cout << "==============EG===================" << endl;
     sm3b32.EG(b2);
     sm3b32.showMatrix(cout);
     cout << "[" << b2[0] << ", " << b2[1] << ", " << b2[2] << "]" << endl;
     
+    cout << "==============Multiply by scalar===================" << endl;
     sm3b32.multiplyByScalar(2);
     sm3b32.showMatrix(cout);
     
