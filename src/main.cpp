@@ -157,6 +157,9 @@ void basicTesting()
     sm3b32.showMatrix(cout);
     cout << "[" << b2[0] << ", " << b2[1] << ", " << b2[2] << "]" << endl;
     
+    sm3b32.multiplyByScalar(2);
+    sm3b32.showMatrix(cout);
+    
 }
 
 // MAIN:

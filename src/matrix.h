@@ -65,6 +65,8 @@ public:
     // Operador []
     MatrixRow operator[](int row);
 
+    virtual void multiplyByScalar(double scalar);
+
     virtual void operator *(Matrix& aMatrix);
 
     virtual void operator +(Matrix& aMatrix);
@@ -121,6 +123,7 @@ class SparseMatrixReloaded: public Matrix{
     public:
         virtual double getValue(unsigned int row, unsigned int col) override;
         virtual void setValue(unsigned int row, unsigned int col, double value) override;
+        virtual void multiplyByScalar(double scalar) override;
         virtual void operator +(SparseMatrixReloaded& aMatrix);
         virtual void operator *(SparseMatrixReloaded& aMatrix);
         virtual void EG(vector<double> & B) override;
@@ -128,3 +131,4 @@ class SparseMatrixReloaded: public Matrix{
 };
 
 #endif /* MATRIX_H */
+

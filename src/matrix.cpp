@@ -68,6 +68,16 @@ Matrix::MatrixRow Matrix::operator[](int row){
     return MatrixRow(this, row);
 }
 
+void Matrix::multiplyByScalar(double scalar){
+    for (unsigned int i = 1; i <= this->rows; i++){
+        for (unsigned int j = 1; j <= this->cols; j++){
+            MatrixElement mij = (*this)[i][j];
+            mij = mij * scalar;
+        }
+    }
+    
+}
+
 void Matrix::operator*(Matrix& aMatrix){
     for (unsigned int i = 1; i <= this->rows; i++)
     {
@@ -286,6 +296,20 @@ void SparseMatrixReloaded::setValue(unsigned int row, unsigned int col, double v
     nodePosition->data = value;	//Existe (si o si!): Le asigno el valor (si lo cree recien agrega un MINIMO overhead)
 }
 
+void SparseMatrixReloaded::multiplyByScalar(double scalar){
+    for (unsigned int row = 0; row < this->rows; row++){
+        list<SparseMatrixReloaded::ListNode>::iterator it = this->matrix[row].begin();
+        while (it != this->matrix[row].end()){
+            it->data *= scalar;
+            if (abs(it->data) < this->epsilon){
+                it = this->matrix[row].erase(it);
+            }else{
+                it++;
+            }
+        }
+    }
+}
+
 void SparseMatrixReloaded::operator+(SparseMatrixReloaded& aMatrix)
 {
     for (unsigned int row = 0; row < this->rows; row++){    // Sumamos fila a fila
@@ -411,3 +435,4 @@ void SparseMatrixReloaded::EG(vector<double>& B){
         }
     }
 }
+
