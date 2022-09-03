@@ -61,6 +61,9 @@ public:
     // Obtengo la cantidad de Filas
     unsigned int Rows();
 
+    // Obtengo el epsilon
+    unsigned int Epsilon();
+
     // Muestra la matriz
     ostream &showMatrix(ostream &);
 
@@ -69,13 +72,13 @@ public:
 
     virtual void multiplyByScalar(double scalar);
 
-    virtual void operator *(Matrix& aMatrix);
+    virtual void operator*(Matrix &aMatrix);
 
-    virtual void operator +(Matrix& aMatrix);
+    virtual void operator+(Matrix &aMatrix);
 
-    virtual void EG(vector<double>& B);
+    virtual void EG(vector<double> &B);
 
-    virtual vector<double> backwardSubstitution(vector<double>& B);
+    virtual vector<double> backwardSubstitution(vector<double> &B);
 };
 // IMPLEMENTACION "CLASICA" DE MATRIZ
 class GridMatrix : public Matrix
@@ -114,30 +117,30 @@ public:
     SparseMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon);
 };
 
-class SparseMatrixReloaded: public Matrix{
-    protected:
-		struct ListNode{
-			double data;
-			unsigned int column;
-			ListNode(double data, unsigned int column): data(data), column(column){}
-		};
-        vector<list<ListNode>> matrix;
-        SparseMatrixReloaded getTransposedMatrix();
-        list<ListNode>::iterator findNodePosition(unsigned int row, unsigned int column);
-        virtual void initialize() override;
+class SparseMatrixReloaded : public Matrix
+{
+protected:
+    struct ListNode
+    {
+        double data;
+        unsigned int column;
+        ListNode(double data, unsigned int column) : data(data), column(column) {}
+    };
+    vector<list<ListNode>> matrix;
+    SparseMatrixReloaded getTransposedMatrix();
+    list<ListNode>::iterator findNodePosition(unsigned int row, unsigned int column);
+    virtual void initialize() override;
 
-    public:
-        virtual double getValue(unsigned int row, unsigned int col) override;
-        virtual void setValue(unsigned int row, unsigned int col, double value) override;
-        virtual void multiplyByScalar(double scalar) override;
-        virtual void operator +(SparseMatrixReloaded& aMatrix);
-        virtual void operator *(SparseMatrixReloaded& aMatrix);
-        virtual void EG(vector<double> & B) override;
-        virtual vector<double> backwardSubstitution(vector<double>& B) override;
-        SparseMatrixReloaded(unsigned int rows, unsigned int cols, double epsilon);
-        SparseMatrixReloaded(vector<tuple<unsigned int, unsigned int>> values, double epsilon);
+public:
+    virtual double getValue(unsigned int row, unsigned int col) override;
+    virtual void setValue(unsigned int row, unsigned int col, double value) override;
+    virtual void multiplyByScalar(double scalar) override;
+    virtual void operator+(SparseMatrixReloaded &aMatrix);
+    virtual void operator*(SparseMatrixReloaded &aMatrix);
+    virtual void EG(vector<double> &B) override;
+    virtual vector<double> backwardSubstitution(vector<double> &B) override;
+    SparseMatrixReloaded(unsigned int rows, unsigned int cols, double epsilon);
+    SparseMatrixReloaded(vector<tuple<unsigned int, unsigned int>> values, double epsilon);
 };
 
 #endif /* MATRIX_H */
-
-

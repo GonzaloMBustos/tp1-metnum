@@ -55,14 +55,17 @@ Matrix::Matrix(unsigned int n, unsigned int m, double epsilon)
     this->epsilon = epsilon;
 }
 
-Matrix::Matrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon){
-    if (values.size() <= 1){
+Matrix::Matrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon)
+{
+    if (values.size() <= 1)
+    {
         return;
     }
     this->rows = get<0>(values[0]);
     this->cols = get<0>(values[0]);
     this->epsilon = epsilon;
-    for(unsigned int i = 1; i < values.size(); i++){
+    for (unsigned int i = 1; i < values.size(); i++)
+    {
         unsigned int row = get<0>(values[i]);
         unsigned int col = get<1>(values[i]);
         (*this)[row][col] += 1;
@@ -77,6 +80,11 @@ unsigned int Matrix::Columns()
 unsigned int Matrix::Rows()
 {
     return this->rows;
+}
+
+unsigned int Matrix::Epsilon()
+{
+    return this->epsilon;
 }
 
 Matrix::MatrixRow Matrix::operator[](int row)
@@ -154,8 +162,9 @@ void Matrix::EG(vector<double> &B)
                 // cout << "---------------------------------------" << endl;
             }
             B[j - 1] = B[j - 1] - m * B[i - 1];
-            if (abs(B[j-1] < this->epsilon)){
-                B[j-1] = 0;
+            if (abs(B[j - 1] < this->epsilon))
+            {
+                B[j - 1] = 0;
             }
         }
     }
@@ -172,16 +181,20 @@ void Matrix::zero_fill()
     }
 }
 
-vector<double> Matrix::backwardSubstitution(vector<double>& B){
-    vector<double> rta = vector<double>(B.size(),0);
-    for(unsigned int i = this->rows; i > 0; i--){
-        rta[i-1] = B[i-1];
-        for(unsigned int j = i+1; j <= this->cols; j++){
-            rta[i-1] -= (*this)[i][j] * rta[j-1];
+vector<double> Matrix::backwardSubstitution(vector<double> &B)
+{
+    vector<double> rta = vector<double>(B.size(), 0);
+    for (unsigned int i = this->rows; i > 0; i--)
+    {
+        rta[i - 1] = B[i - 1];
+        for (unsigned int j = i + 1; j <= this->cols; j++)
+        {
+            rta[i - 1] -= (*this)[i][j] * rta[j - 1];
         }
-        rta[i-1] = rta[i-1]/(*this)[i][i];
-        if (abs(rta[i-1]) < this->epsilon){
-            rta[i-1] = 0;
+        rta[i - 1] = rta[i - 1] / (*this)[i][i];
+        if (abs(rta[i - 1]) < this->epsilon)
+        {
+            rta[i - 1] = 0;
         }
     }
     return rta;
@@ -213,15 +226,18 @@ GridMatrix::GridMatrix(unsigned int rows, unsigned int cols, double epsilon) : M
     this->initialize();
 }
 
-GridMatrix::GridMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon): Matrix(values, epsilon){
-    if (values.size() <= 1){
+GridMatrix::GridMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(values, epsilon)
+{
+    if (values.size() <= 1)
+    {
         return;
     }
     this->rows = get<0>(values[0]);
     this->cols = get<0>(values[0]);
     this->epsilon = epsilon;
     this->initialize();
-    for(unsigned int i = 1; i < values.size(); i++){
+    for (unsigned int i = 1; i < values.size(); i++)
+    {
         unsigned int row = get<0>(values[i]);
         unsigned int col = get<1>(values[i]);
         (*this)[row][col] += 1;
@@ -253,7 +269,8 @@ SparseMatrix::SparseMatrix(unsigned int rows, unsigned int cols, double epsilon)
     this->initialize();
 }
 
-SparseMatrix::SparseMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(values, epsilon){
+SparseMatrix::SparseMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(values, epsilon)
+{
     return;
 }
 
@@ -317,15 +334,18 @@ SparseMatrixReloaded::SparseMatrixReloaded(unsigned int rows, unsigned int cols,
     this->initialize();
 }
 
-SparseMatrixReloaded::SparseMatrixReloaded(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(0, 0, 0){
-    if (values.size() <= 1){
+SparseMatrixReloaded::SparseMatrixReloaded(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(0, 0, 0)
+{
+    if (values.size() <= 1)
+    {
         return;
     }
     this->rows = get<0>(values[0]);
     this->cols = get<0>(values[0]);
     this->epsilon = epsilon;
     this->initialize();
-    for(unsigned int i = 1; i < values.size(); i++){
+    for (unsigned int i = 1; i < values.size(); i++)
+    {
         unsigned int row = get<0>(values[i]);
         unsigned int col = get<1>(values[i]);
         (*this)[row][col] += 1;
@@ -559,29 +579,33 @@ void SparseMatrixReloaded::EG(vector<double> &B)
     }
 }
 
-vector<double> SparseMatrixReloaded::backwardSubstitution(vector<double>& B){
-    vector<double> rta = vector<double>(B.size(),0);
-    for(unsigned int i = this->rows; i-- > 0;){ //Chequea q i > 0, luego decrementa antes de entrar al loop (los unsigned no pueden ser < 0!)
+vector<double> SparseMatrixReloaded::backwardSubstitution(vector<double> &B)
+{
+    vector<double> rta = vector<double>(B.size(), 0);
+    for (unsigned int i = this->rows; i-- > 0;)
+    { // Chequea q i > 0, luego decrementa antes de entrar al loop (los unsigned no pueden ser < 0!)
         rta[i] = B[i];
-        list<SparseMatrixReloaded::ListNode>::iterator it = this->findNodePosition(i,i);
+        list<SparseMatrixReloaded::ListNode>::iterator it = this->findNodePosition(i, i);
         double mii = it->data;
-        for(unsigned int j = i+1; j < this->cols && it != this->matrix[i].end();){
-            if(it->column < j){
+        for (unsigned int j = i + 1; j < this->cols && it != this->matrix[i].end();)
+        {
+            if (it->column < j)
+            {
                 it++;
                 continue;
             }
-            if (it->column == j){
+            if (it->column == j)
+            {
                 rta[i] -= it->data * rta[j];
                 it++;
             }
             j++;
         }
-        rta[i] = rta[i]/mii;
-        if (abs(rta[i]) < this->epsilon){
+        rta[i] = rta[i] / mii;
+        if (abs(rta[i]) < this->epsilon)
+        {
             rta[i] = 0;
         }
     }
     return rta;
 }
-
-
