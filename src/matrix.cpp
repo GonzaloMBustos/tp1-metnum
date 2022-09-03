@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+
 #include <cmath>
 #include "matrix.h"
 
@@ -52,6 +53,20 @@ Matrix::Matrix(unsigned int n, unsigned int m, double epsilon)
     this->rows = n;
     this->cols = m;
     this->epsilon = epsilon;
+}
+
+Matrix::Matrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon){
+    if (values.size() <= 1){
+        return;
+    }
+    this->rows = get<0>(values[0]);
+    this->cols = get<0>(values[0]);
+    this->epsilon = epsilon;
+    for(unsigned int i = 1; i < values.size(); i++){
+        unsigned int row = get<0>(values[i]);
+        unsigned int col = get<1>(values[i]);
+        (*this)[row][col] += 1;
+    }
 }
 
 unsigned int Matrix::Columns()
@@ -198,6 +213,21 @@ GridMatrix::GridMatrix(unsigned int rows, unsigned int cols, double epsilon) : M
     this->initialize();
 }
 
+GridMatrix::GridMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon): Matrix(values, epsilon){
+    if (values.size() <= 1){
+        return;
+    }
+    this->rows = get<0>(values[0]);
+    this->cols = get<0>(values[0]);
+    this->epsilon = epsilon;
+    this->initialize();
+    for(unsigned int i = 1; i < values.size(); i++){
+        unsigned int row = get<0>(values[i]);
+        unsigned int col = get<1>(values[i]);
+        (*this)[row][col] += 1;
+    }
+}
+
 void GridMatrix::initialize()
 {
     this->grid.resize(this->rows);
@@ -221,6 +251,10 @@ void GridMatrix::setValue(unsigned int row, unsigned int col, double value)
 SparseMatrix::SparseMatrix(unsigned int rows, unsigned int cols, double epsilon) : Matrix(rows, cols, epsilon)
 {
     this->initialize();
+}
+
+SparseMatrix::SparseMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(values, epsilon){
+    return;
 }
 
 void SparseMatrix::initialize()
@@ -281,6 +315,21 @@ void SparseMatrix::setValue(unsigned int row, unsigned int col, double value)
 SparseMatrixReloaded::SparseMatrixReloaded(unsigned int rows, unsigned int cols, double epsilon) : Matrix(rows, cols, epsilon)
 {
     this->initialize();
+}
+
+SparseMatrixReloaded::SparseMatrixReloaded(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(0, 0, 0){
+    if (values.size() <= 1){
+        return;
+    }
+    this->rows = get<0>(values[0]);
+    this->cols = get<0>(values[0]);
+    this->epsilon = epsilon;
+    this->initialize();
+    for(unsigned int i = 1; i < values.size(); i++){
+        unsigned int row = get<0>(values[i]);
+        unsigned int col = get<1>(values[i]);
+        (*this)[row][col] += 1;
+    }
 }
 
 void SparseMatrixReloaded::initialize()

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <tuple>
 #include <list>
 
 using namespace std;
@@ -49,6 +50,7 @@ protected:
 public:
     // Constructor
     Matrix(unsigned int rows, unsigned int columns, double epsilon);
+    Matrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon);
 
     virtual double getValue(unsigned int row, unsigned int col) = 0;
     virtual void setValue(unsigned int row, unsigned int col, double value) = 0;
@@ -86,6 +88,7 @@ public:
     virtual double getValue(unsigned int row, unsigned int col) override;
     virtual void setValue(unsigned int row, unsigned int col, double value) override;
     GridMatrix(unsigned int rows, unsigned int cols, double epsilon);
+    GridMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon);
 };
 
 // IMPLEMENTACION PARA MATRICES RALAS, FUNCIONA SIMILAR AL FORMATO DE LOS ARCHIVOS (SOLO GUARDA INFORMACION DE LAS CELDAS OCUPADAS)
@@ -108,6 +111,7 @@ public:
     virtual double getValue(unsigned int row, unsigned int col) override;
     virtual void setValue(unsigned int row, unsigned int col, double value) override;
     SparseMatrix(unsigned int rows, unsigned int cols, double epsilon);
+    SparseMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon);
 };
 
 class SparseMatrixReloaded: public Matrix{
@@ -131,6 +135,7 @@ class SparseMatrixReloaded: public Matrix{
         virtual void EG(vector<double> & B) override;
         virtual vector<double> backwardSubstitution(vector<double>& B) override;
         SparseMatrixReloaded(unsigned int rows, unsigned int cols, double epsilon);
+        SparseMatrixReloaded(vector<tuple<unsigned int, unsigned int>> values, double epsilon);
 };
 
 #endif /* MATRIX_H */

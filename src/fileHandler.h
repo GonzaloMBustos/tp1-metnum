@@ -2,6 +2,8 @@
 #define FILEHANDLER_H
 
 #include "matrix.h"
+#include <tuple>
+#include <vector>
 
 
 using namespace std;
@@ -19,6 +21,7 @@ class FileHandler {
 	
 	    //Lee del archivo y arma la matriz
 	    SparseMatrixReloaded loadMatrix();
+	    vector<tuple<unsigned int, unsigned int>> readContents();
 };
 
 #endif /* FILEHANDLER_H */

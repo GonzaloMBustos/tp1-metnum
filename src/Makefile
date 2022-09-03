@@ -24,4 +24,4 @@ cleanall: clean cleandebug
 
 
 run: tp
-	./tp
+	./tp 0.76 "../tests/test_aleatorio_desordenado.txt"

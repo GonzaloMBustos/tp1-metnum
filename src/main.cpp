@@ -1,6 +1,8 @@
 #include "matrix.h"
-// #include "fileHandler.h"
+#include "fileHandler.h"
 #include <iostream>
+#include <cstdlib>
+#include <stdlib.h>
 using namespace std;
 
 void basicTesting()
@@ -179,6 +181,14 @@ void basicTesting()
 int main(int argc, char *argv[])
 {
 
+    if (argc != 3){
+        basicTesting();
+        cout << "Parametros invalido (especificar 'p' y archivo de entrada), por lo tanto se corrieron tests de debug";
+        return 0;
+    }
+
+    double p = atof(argv[1]);
+    cout << "P = " << p << endl;
     // SparseMatrix testMatrix = SparseMatrix(2, 2);
     // testMatrix[0][0] = 1;
     // testMatrix[0][1] = 2;
@@ -188,12 +198,13 @@ int main(int argc, char *argv[])
     // cout << "Size: " << testMatrix.Columns() << " x " << testMatrix.Rows() << endl;
 
     // testMatrix.showMatrix(cout);
+    cout << "Archivo: " << argv[2] << endl;
+    FileHandler myFile = FileHandler(argv[2]);
 
-    // FileHandler myFile = FileHandler("../tests/test_aleatorio_desordenado.txt");
-    // SparseMatrix testMatrix2 = myFile.loadMatrix();
-    // testMatrix2.showMatrix(cout);
+    cout << "===== Matriz Input ====" << endl;
+    SparseMatrixReloaded testMatrix2(myFile.readContents(), 0.0001);
+    testMatrix2.showMatrix(cout);
 
-    basicTesting();
 
     return 0;
 }
