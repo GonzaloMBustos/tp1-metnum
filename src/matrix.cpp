@@ -139,6 +139,9 @@ void Matrix::EG(vector<double> &B)
                 // cout << "---------------------------------------" << endl;
             }
             B[j - 1] = B[j - 1] - m * B[i - 1];
+            if (abs(B[j-1] < this->epsilon)){
+                B[j-1] = 0;
+            }
         }
     }
 }
@@ -152,6 +155,21 @@ void Matrix::zero_fill()
             (*this)[i][j] = 0;
         }
     }
+}
+
+vector<double> Matrix::backwardSubstitution(vector<double>& B){
+    vector<double> rta = vector<double>(B.size(),0);
+    for(unsigned int i = this->rows; i > 0; i--){
+        rta[i-1] = B[i-1];
+        for(unsigned int j = i+1; j <= this->cols; j++){
+            rta[i-1] -= (*this)[i][j] * rta[j-1];
+        }
+        rta[i-1] = rta[i-1]/(*this)[i][i];
+        if (abs(rta[i-1]) < this->epsilon){
+            rta[i-1] = 0;
+        }
+    }
+    return rta;
 }
 
 ostream &Matrix::showMatrix(ostream &out)
@@ -491,3 +509,30 @@ void SparseMatrixReloaded::EG(vector<double> &B)
         }
     }
 }
+
+vector<double> SparseMatrixReloaded::backwardSubstitution(vector<double>& B){
+    vector<double> rta = vector<double>(B.size(),0);
+    for(unsigned int i = this->rows; i-- > 0;){ //Chequea q i > 0, luego decrementa antes de entrar al loop (los unsigned no pueden ser < 0!)
+        rta[i] = B[i];
+        list<SparseMatrixReloaded::ListNode>::iterator it = this->findNodePosition(i,i);
+        double mii = it->data;
+        for(unsigned int j = i+1; j < this->cols && it != this->matrix[i].end();){
+            if(it->column < j){
+                it++;
+                continue;
+            }
+            if (it->column == j){
+                rta[i] -= it->data * rta[j];
+                it++;
+            }
+            j++;
+        }
+        rta[i] = rta[i]/mii;
+        if (abs(rta[i]) < this->epsilon){
+            rta[i] = 0;
+        }
+    }
+    return rta;
+}
+
+

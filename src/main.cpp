@@ -140,27 +140,38 @@ void basicTesting()
     sm2b2.showMatrix(cout);
 
 
-    cout << "==============Matriz de 3x3===================" << endl;
-    sm3b32[1][1] = 2;
-    sm3b32[1][2] = 1;
-    sm3b32[1][3] = 3;
-    sm3b32[2][1] = 2;
-    sm3b32[2][2] = 2;
-    sm3b32[2][3] = 3;
-    sm3b32[3][1] = 2;
-    sm3b32[3][2] = 3;
-    sm3b32[3][3] = 0;
-    sm3b32.showMatrix(cout);
+    cout << "==============Matriz de 4x4===================" << endl;
+    sm4b42[1][1] = 1;
+    sm4b42[1][2] = 2;
+    sm4b42[1][3] = 1;
+    sm4b42[1][4] = -1;
+    sm4b42[2][1] = 3;
+    sm4b42[2][2] = 2;
+    sm4b42[2][3] = 4;
+    sm4b42[2][4] = 4;
+    sm4b42[3][1] = 4;
+    sm4b42[3][2] = 4;
+    sm4b42[3][3] = 3;
+    sm4b42[3][4] = 4;
+    sm4b42[4][1] = 2;
+    sm4b42[4][2] = 0;
+    sm4b42[4][3] = 1;
+    sm4b42[4][4] = 5;
+    sm4b42.showMatrix(cout);
 
-    vector<double> b2 = {1,2,4.5};
+    vector<double> b2 = {5, 16, 22, 15};
     cout << "==============EG===================" << endl;
-    sm3b32.EG(b2);
-    sm3b32.showMatrix(cout);
-    cout << "[" << b2[0] << ", " << b2[1] << ", " << b2[2] << "]" << endl;
-    
+    sm4b42.EG(b2);
+    sm4b42.showMatrix(cout);
+    cout << "============== B ===================" << endl;
+    cout << "[" << b2[0] << ", " << b2[1] << ", " << b2[2] << ", " << b2[3] << "]" << endl;
+    cout << "==============BackSubst===================" << endl;
+    vector<double> rta = sm4b42.backwardSubstitution(b2);
+    cout << "[" << rta[0] << ", " << rta[1] << ", " << rta[2] << ", " << rta[3] << "]" << endl;
+
     cout << "==============Multiply by scalar===================" << endl;
-    sm3b32.multiplyByScalar(2);
-    sm3b32.showMatrix(cout);
+    sm4b42.multiplyByScalar(2);
+    sm4b42.showMatrix(cout);
     
 }
 
