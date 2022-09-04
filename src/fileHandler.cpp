@@ -9,7 +9,8 @@ FileHandler::FileHandler(string path)
     fileName = path;
 }
 
-vector<tuple<unsigned int, unsigned int>> FileHandler::readContents(){
+vector<tuple<unsigned int, unsigned int>> FileHandler::readContents()
+{
     ifstream myFile(fileName.c_str());
     if (!myFile.is_open())
     {
@@ -53,4 +54,20 @@ SparseMatrixReloaded FileHandler::loadMatrix()
 
     myFile.close();
     return outMatrix;
+}
+
+void FileHandler::writeOutResult(vector<double> result)
+{
+    string outputFile = fileName + ".out";
+    ofstream myFile(outputFile);
+    for (long unsigned int i = 0; i < result.size(); i++)
+    {
+        myFile << result[i];
+        if (i < result.size() - 1)
+        {
+            myFile << "\n";
+        }
+    }
+
+    myFile.close();
 }

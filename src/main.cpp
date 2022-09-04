@@ -220,11 +220,11 @@ vector<double> PageRank(SparseMatrixReloaded I, SparseMatrixReloaded W, SparseMa
 void NormalizeResult(vector<double> *x)
 {
     double sum = 0;
-    for (int i = 0; i < (*x).size(); i++)
+    for (long unsigned int i = 0; i < (*x).size(); i++)
     {
         sum += (*x)[i];
     }
-    for (int i = 0; i < (*x).size(); i++)
+    for (long unsigned int i = 0; i < (*x).size(); i++)
     {
         (*x)[i] = (*x)[i] / sum;
     }
@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
     vector<double> res = PageRank(identity, W, D, p, e);
     cout << "===== PageRank result ====" << endl;
     cout << "[";
-    for (int i = 0; i < res.size(); i++)
+    for (long unsigned int i = 0; i < res.size(); i++)
     {
         cout << res[i] << ", ";
     }
@@ -283,11 +283,13 @@ int main(int argc, char *argv[])
     NormalizeResult(&res);
     cout << "===== Normalized result ====" << endl;
     cout << "[";
-    for (int i = 0; i < res.size(); i++)
+    for (long unsigned int i = 0; i < res.size(); i++)
     {
         cout << res[i] << ", ";
     }
     cout << "]" << endl;
+
+    myFile.writeOutResult(res);
 
     return 0;
 }

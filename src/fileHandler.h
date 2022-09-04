@@ -5,23 +5,22 @@
 #include <tuple>
 #include <vector>
 
-
 using namespace std;
 
+class FileHandler
+{
 
-class FileHandler {
+private:
+	string fileName;
 
-    private:
-	    string fileName;
+public:
+	// Constructor
+	FileHandler(string path);
 
-    public:
-
-	    //Constructor
-	    FileHandler (string path);
-	
-	    //Lee del archivo y arma la matriz
-	    SparseMatrixReloaded loadMatrix();
-	    vector<tuple<unsigned int, unsigned int>> readContents();
+	// Lee del archivo y arma la matriz
+	SparseMatrixReloaded loadMatrix();
+	vector<tuple<unsigned int, unsigned int>> readContents();
+	void writeOutResult(vector<double> result);
 };
 
 #endif /* FILEHANDLER_H */
