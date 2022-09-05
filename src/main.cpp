@@ -295,16 +295,20 @@ void performTest(unsigned int matrix_size, unsigned int iterations, unsigned int
     unsigned int threshold = (RAND_MAX / 100) * fill;
     vector<tuple<unsigned int, unsigned int>> contents;
     contents.emplace_back(matrix_size, matrix_size);
-    for(unsigned int i = 1; i < matrix_size; i++){
-        for(unsigned int j = 1; j < matrix_size; j++){
+
+    unsigned int co = 0;
+    for(unsigned int i = 0; i < matrix_size; i++){
+        for(unsigned int j = 0; j < matrix_size; j++){
             unsigned int r = rand();
             if (r < threshold){
-                contents.emplace_back(i, j);
+                contents.emplace_back(i+1, j+1);
+                co++;
             }
+
         }
     }
     
-    cout << " DONE!" << endl << "Warming up..";
+    cout << " DONE!" << endl << "Final fill: " << (double)co/(matrix_size*matrix_size)*100 << "%" << endl << "Warming up..";
     for(unsigned int i = 0; i < warmup_iterations; i++){
         performExperiment<T>(contents, p, epsilon, false);
     }
