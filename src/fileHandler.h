@@ -20,7 +20,7 @@ public:
 	// Lee del archivo y arma la matriz
 	SparseMatrixReloaded loadMatrix();
 	vector<tuple<unsigned int, unsigned int>> readContents();
-	void writeOutResult(vector<double> result);
+	void writeOutResult(vector<double> result, double p);
 };
 
 #endif /* FILEHANDLER_H */

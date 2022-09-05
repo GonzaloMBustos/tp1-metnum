@@ -56,10 +56,11 @@ SparseMatrixReloaded FileHandler::loadMatrix()
     return outMatrix;
 }
 
-void FileHandler::writeOutResult(vector<double> result)
+void FileHandler::writeOutResult(vector<double> result, double p)
 {
     string outputFile = fileName + ".out";
     ofstream myFile(outputFile);
+    myFile << p << "\n";
     for (long unsigned int i = 0; i < result.size(); i++)
     {
         myFile << result[i];

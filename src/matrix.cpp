@@ -202,6 +202,10 @@ vector<double> Matrix::backwardSubstitution(vector<double> &B)
 
 ostream &Matrix::showMatrix(ostream &out)
 {
+    if (this->rows > 1000 or this->cols > 1000){
+        cout << "La matriz es demasiado grande, no se va a imprimir" << endl;
+        return out;
+    }
     for (unsigned int i = 1; i <= this->rows; i++)
     {
         for (unsigned int j = 1; j <= this->cols; j++)
@@ -219,6 +223,18 @@ ostream &Matrix::showMatrix(ostream &out)
     return out;
 }
 
+vector<double> Matrix::sumColumns(){
+    vector<double>columnsSum(this->cols, 0);
+    for (unsigned int j = 1; j <= this->cols; j++)
+    {
+        for (unsigned int i = 1; i <= this->rows; i++)
+        {
+            columnsSum[j-1] += (*this)[i][j];
+        }
+    }
+    return columnsSum;
+}
+
 // FIN MATRIZ ABSTRACTA
 
 GridMatrix::GridMatrix(unsigned int rows, unsigned int cols, double epsilon) : Matrix(rows, cols, epsilon)
@@ -226,7 +242,7 @@ GridMatrix::GridMatrix(unsigned int rows, unsigned int cols, double epsilon) : M
     this->initialize();
 }
 
-GridMatrix::GridMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(values, epsilon)
+GridMatrix::GridMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(0, 0, 0)
 {
     if (values.size() <= 1)
     {
@@ -608,4 +624,17 @@ vector<double> SparseMatrixReloaded::backwardSubstitution(vector<double> &B)
         }
     }
     return rta;
+}
+
+vector<double> SparseMatrixReloaded::sumColumns(){
+    vector<double>columnsSum(this->cols, 0);
+    for (unsigned int i = 0; i < this->rows; i++)
+    {
+        list<SparseMatrixReloaded::ListNode>::iterator it = this->matrix[i].begin();
+        while(it != this->matrix[i].end()){
+            columnsSum[it->column] += it->data;
+            it++;
+        }
+    }
+    return columnsSum;
 }

@@ -79,6 +79,8 @@ public:
     virtual void EG(vector<double> &B);
 
     virtual vector<double> backwardSubstitution(vector<double> &B);
+    
+    virtual vector<double> sumColumns();
 };
 // IMPLEMENTACION "CLASICA" DE MATRIZ
 class GridMatrix : public Matrix
@@ -139,6 +141,7 @@ public:
     virtual void operator*(SparseMatrixReloaded &aMatrix);
     virtual void EG(vector<double> &B) override;
     virtual vector<double> backwardSubstitution(vector<double> &B) override;
+    virtual vector<double> sumColumns() override;
     SparseMatrixReloaded(unsigned int rows, unsigned int cols, double epsilon);
     SparseMatrixReloaded(vector<tuple<unsigned int, unsigned int>> values, double epsilon);
 };
