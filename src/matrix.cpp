@@ -285,9 +285,21 @@ SparseMatrix::SparseMatrix(unsigned int rows, unsigned int cols, double epsilon)
     this->initialize();
 }
 
-SparseMatrix::SparseMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(values, epsilon)
+SparseMatrix::SparseMatrix(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(0, 0, 0)
 {
-    return;
+    if (values.size() <= 1)
+    {
+        return;
+    }
+    this->rows = get<0>(values[0]);
+    this->cols = get<0>(values[0]);
+    this->epsilon = epsilon;
+    for (unsigned int i = 1; i < values.size(); i++)
+    {
+        unsigned int row = get<0>(values[i]);
+        unsigned int col = get<1>(values[i]);
+        (*this)[row][col] += 1;
+    }
 }
 
 void SparseMatrix::initialize()
@@ -516,7 +528,7 @@ void SparseMatrixReloaded::operator*(SparseMatrixReloaded &aMatrix)
                 { // M1(ij) != 0 y M2(ij) != 0
                     partial += it1->data * it2->data;
                     if (abs(partial) < this->epsilon)
-                    { // TODO: ESTO ESTA BIEN??
+                    {
                         partial = 0;
                     }
                     it1++;
