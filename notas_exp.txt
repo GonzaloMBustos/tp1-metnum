@@ -1,0 +1,7 @@
+test_15_segundos 0.0004983131999999979
+test_30_segundos 0.0007488655999999948
+test_aleatorio   4.0000000001150227e-07
+test_aleatorio_desordenado 0.0
+test_completo  0.0
+test_sin_links 0.0
+test_trivial 0.0
