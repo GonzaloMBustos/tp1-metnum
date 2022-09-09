@@ -9,3 +9,69 @@ Set de instancias de prueba con sus respectivos ranking de Page:
 
 (*) Todos los resultados tienen como primera linea el p que se utilizó.
 
+INSTRUCCIONES PARA COMPILAR:
+$ cd [RUTA_PROYECTO]/src
+$ make
+
+(Con el comando make debería ser suficiente para compilar el código)
+
+INSTRUCCIONES PARA CORRER EL CÓDIGO (luego de compilado):
+$ ./tp [RUTA_DEL_ARCHIVO_DE_INPUT] [VALOR_DE_P]
+
+===== Ejemplos de compilación y corrida del código ===
+
+# Ejemplo 1:
+$ cd /home/Metnum/TPs/tp1-metnum/src
+$ make
+$ ./tp /home/Metnum/TPs/tp1-metnum/tests/test_completo.txt 0.5
+
+>>> Output
+P = 0.5
+Archivo: /home/Metnum/TPs/tp1-metnum/tests/test_completo.txt
+===== Matriz Input ====
+|  0|  1|  1|  1|  1|
+|  1|  0|  1|  1|  1|
+|  1|  1|  0|  1|  1|
+|  1|  1|  1|  0|  1|
+|  1|  1|  1|  1|  0|
+
+===== Matriz Identidad ====
+|  1|  0|  0|  0|  0|
+|  0|  1|  0|  0|  0|
+|  0|  0|  1|  0|  0|
+|  0|  0|  0|  1|  0|
+|  0|  0|  0|  0|  1|
+
+===== Matriz D ====
+|0.25|  0|  0|  0|  0|
+|  0|0.25|  0|  0|  0|
+|  0|  0|0.25|  0|  0|
+|  0|  0|  0|0.25|  0|
+|  0|  0|  0|  0|0.25|
+
+===== PageRank result ====
+[2, 2, 2, 2, 2, ]
+===== Normalized result ====
+[0.2, 0.2, 0.2, 0.2, 0.2, ]
+
+# Ejemplo 2:
+$ cd /home/Metnum/TPs/tp1-metnum/src
+$ make
+$ ./tp /home/Metnum/TPs/tp1-metnum/tests/test_trivial.txt 0.8
+
+>>> Output
+P = 0.8
+Archivo: /home/dell/Desktop/Gonza/University/Year-3/Metnum/TPs/tp1-metnum/tests/test_trivial.txt
+===== Matriz Input ====
+|  0|
+
+===== Matriz Identidad ====
+|  1|
+
+===== Matriz D ====
+|  0|
+
+===== PageRank result ====
+[1, ]
+===== Normalized result ====
+[1, ]
