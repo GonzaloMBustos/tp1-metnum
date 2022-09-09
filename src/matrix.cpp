@@ -364,7 +364,7 @@ SparseMatrixReloaded::SparseMatrixReloaded(unsigned int rows, unsigned int cols,
 
 SparseMatrixReloaded::SparseMatrixReloaded(vector<tuple<unsigned int, unsigned int>> values, double epsilon) : Matrix(0, 0, 0)
 {
-    if (values.size() <= 1)
+    if (values.size() < 1)
     {
         return;
     }
@@ -635,6 +635,7 @@ vector<double> SparseMatrixReloaded::backwardSubstitution(vector<double> &B)
             rta[i] = 0;
         }
     }
+
     return rta;
 }
 

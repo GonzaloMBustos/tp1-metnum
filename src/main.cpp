@@ -198,7 +198,7 @@ T buildD(T& W, double epsilon)
     vector<double> cjs = W.sumColumns();
     for (unsigned int i = 0; i < n; i++)
     {
-        if (1/abs(cjs[i]) > W.Epsilon())
+        if (abs(cjs[i]) < W.Epsilon())
         {
             D.setValue(i, i, (1 / cjs[i]));
         }
