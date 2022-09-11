@@ -79,7 +79,7 @@ public:
     virtual void EG(vector<double> &B);
 
     virtual vector<double> backwardSubstitution(vector<double> &B);
-    
+
     virtual vector<double> sumColumns();
 };
 // IMPLEMENTACION "CLASICA" DE MATRIZ
@@ -97,8 +97,6 @@ public:
 };
 
 // IMPLEMENTACION PARA MATRICES RALAS, FUNCIONA SIMILAR AL FORMATO DE LOS ARCHIVOS (SOLO GUARDA INFORMACION DE LAS CELDAS OCUPADAS)
-// TODO PENSAR COMO IMPLEMENTAR ALGORITMOS MAS EFICIENTES PARA ESTE TIPO DE MATRICES
-// TODO PENSAR EN UN TIPO DE ORDENAMIENTO DE LOS VALORES (PARA AGILIZAR LA INSERCION/BUSQUEDA/DELETE)
 class SparseMatrix : public Matrix
 {
 protected:

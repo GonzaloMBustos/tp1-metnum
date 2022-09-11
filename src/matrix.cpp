@@ -4,7 +4,7 @@
 #include <cmath>
 #include "matrix.h"
 
-// LO QUE ESTA ABAJO ES PARA QUE FUNCIONEN LOS BRACKETS CON CUALQUIER IMPLEMENTACION INTERNA (Matriz[i][j])
+// PARA QUE FUNCIONEN LOS BRACKETS CON CUALQUIER IMPLEMENTACION INTERNA (Matriz[i][j])
 Matrix::MatrixRow::MatrixRow(Matrix *aMatrix, unsigned int row)
 {
     this->ParentMatrix = aMatrix;
@@ -45,9 +45,7 @@ Matrix::MatrixElement::operator double()
     return this->ParentMatrix->getValue(this->row, this->col);
 }
 
-// FIN DE COSAS LOCAS
-
-// IMPLEMENTACION ABSTRACTA DE MATRIX (SIN ESTRUCTURA INTERNA DEFINIDA POR AHORA)
+// IMPLEMENTACION ABSTRACTA DE MATRIX (SIN ESTRUCTURA INTERNA DEFINIDA)
 Matrix::Matrix(unsigned int n, unsigned int m, double epsilon)
 {
     this->rows = n;
@@ -147,19 +145,11 @@ void Matrix::EG(vector<double> &B)
         }
         for (unsigned int j = i + 1; j <= this->rows; j++)
         {
-            // printf("calculating m = %f / %f\n", double((*this)[j][i]), mii);
-            // this->showMatrix(cout);
             double m = (*this)[j][i] / mii;
             for (unsigned int k = i; k <= this->rows; k++)
             {
-                // this->showMatrix(cout);
                 double value = (*this)[j][k] - m * (*this)[i][k];
-                // printf("m=%f, Setting (%d, %d) = %f\n", m, j, k, value);
-                // printf("%f = %f - %f * %f\n", value, double((*this)[j][k]), m, double((*this)[i][k]));
                 (*this)[j][k] = value;
-                // cout << "---------------setval------------------" << endl;
-                // this->showMatrix(cout);
-                // cout << "---------------------------------------" << endl;
             }
             B[j - 1] = B[j - 1] - m * B[i - 1];
             if (abs(B[j - 1] < this->epsilon))
@@ -202,7 +192,8 @@ vector<double> Matrix::backwardSubstitution(vector<double> &B)
 
 ostream &Matrix::showMatrix(ostream &out)
 {
-    if (this->rows > 1000 or this->cols > 1000){
+    if (this->rows > 1000 or this->cols > 1000)
+    {
         cout << "La matriz es demasiado grande, no se va a imprimir" << endl;
         return out;
     }
@@ -223,13 +214,14 @@ ostream &Matrix::showMatrix(ostream &out)
     return out;
 }
 
-vector<double> Matrix::sumColumns(){
-    vector<double>columnsSum(this->cols, 0);
+vector<double> Matrix::sumColumns()
+{
+    vector<double> columnsSum(this->cols, 0);
     for (unsigned int j = 1; j <= this->cols; j++)
     {
         for (unsigned int i = 1; i <= this->rows; i++)
         {
-            columnsSum[j-1] += (*this)[i][j];
+            columnsSum[j - 1] += (*this)[i][j];
         }
     }
     return columnsSum;
@@ -639,12 +631,14 @@ vector<double> SparseMatrixReloaded::backwardSubstitution(vector<double> &B)
     return rta;
 }
 
-vector<double> SparseMatrixReloaded::sumColumns(){
-    vector<double>columnsSum(this->cols, 0);
+vector<double> SparseMatrixReloaded::sumColumns()
+{
+    vector<double> columnsSum(this->cols, 0);
     for (unsigned int i = 0; i < this->rows; i++)
     {
         list<SparseMatrixReloaded::ListNode>::iterator it = this->matrix[i].begin();
-        while(it != this->matrix[i].end()){
+        while (it != this->matrix[i].end())
+        {
             columnsSum[it->column] += it->data;
             it++;
         }

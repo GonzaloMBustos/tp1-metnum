@@ -191,14 +191,14 @@ T buildIdentity(unsigned int n, double epsilon)
 }
 
 template <typename T>
-T buildD(T& W, double epsilon)
+T buildD(T &W, double epsilon)
 {
     unsigned int n = W.Columns();
     T D(n, n, epsilon);
     vector<double> cjs = W.sumColumns();
     for (unsigned int i = 0; i < n; i++)
     {
-        if (cjs[i] > 0 && 1/abs(cjs[i]) > W.Epsilon())
+        if (cjs[i] > 0 && 1 / abs(cjs[i]) > W.Epsilon())
         {
             D.setValue(i, i, (1 / cjs[i]));
         }
@@ -207,7 +207,7 @@ T buildD(T& W, double epsilon)
 }
 
 template <typename T>
-vector<double> PageRank(T& I, T& W, T& D, double p, vector<double>& e)
+vector<double> PageRank(T &I, T &W, T &D, double p, vector<double> &e)
 {
     W *D;
     W.multiplyByScalar((-1 * p));
@@ -217,7 +217,7 @@ vector<double> PageRank(T& I, T& W, T& D, double p, vector<double>& e)
     return x;
 }
 
-void NormalizeResult(vector<double>& x)
+void NormalizeResult(vector<double> &x)
 {
     double sum = 0;
     for (long unsigned int i = 0; i < x.size(); i++)
@@ -231,31 +231,36 @@ void NormalizeResult(vector<double>& x)
 }
 
 template <typename T>
-vector<double> performExperiment(vector<tuple<unsigned int, unsigned int>> contents, double p, double epsilon, bool doOutput){
+vector<double> performExperiment(vector<tuple<unsigned int, unsigned int>> contents, double p, double epsilon, bool doOutput)
+{
 
     T W(contents, epsilon);
-    if (doOutput) {
+    if (doOutput)
+    {
         cout << "===== Matriz Input ====" << endl;
         W.showMatrix(cout);
     }
-    
+
     T identity = buildIdentity<T>(get<0>(contents[0]), epsilon);
-    if (doOutput) {
+    if (doOutput)
+    {
         cout << "===== Matriz Identidad ====" << endl;
         identity.showMatrix(cout);
     }
-    
+
     T D = buildD<T>(W, epsilon);
-    if (doOutput) {
+    if (doOutput)
+    {
         cout << "===== Matriz D ====" << endl;
         D.showMatrix(cout);
     }
-    
+
     vector<double> e(get<0>(contents[0]), 1);
 
     vector<double> res = PageRank<T>(identity, W, D, p, e);
-    
-    if (doOutput) {
+
+    if (doOutput)
+    {
         cout << "===== PageRank result ====" << endl;
         cout << "[";
         for (long unsigned int i = 0; i < res.size(); i++)
@@ -266,8 +271,9 @@ vector<double> performExperiment(vector<tuple<unsigned int, unsigned int>> conte
     }
 
     NormalizeResult(res);
-    
-    if (doOutput) {
+
+    if (doOutput)
+    {
         cout << "===== Normalized result ====" << endl;
         cout << "[";
         for (long unsigned int i = 0; i < res.size(); i++)
@@ -279,8 +285,9 @@ vector<double> performExperiment(vector<tuple<unsigned int, unsigned int>> conte
     return res;
 }
 
-template<typename T>
-void performTest(unsigned int matrix_size, unsigned int iterations, unsigned int warmup_iterations, unsigned int fill, float p, float epsilon){
+template <typename T>
+void performTest(unsigned int matrix_size, unsigned int iterations, unsigned int warmup_iterations, unsigned int fill, float p, float epsilon)
+{
     cout << "===================================" << endl;
     cout << "Matrix size: " << matrix_size << "x" << matrix_size << endl;
     cout << "Fill: " << fill << "%" << endl;
@@ -290,37 +297,44 @@ void performTest(unsigned int matrix_size, unsigned int iterations, unsigned int
     cout << "Metered iterations: " << iterations << endl;
     cout << "===================================" << endl;
 
-    cout << "Building contents..";    
+    cout << "Building contents..";
     srand(time(NULL));
     unsigned int threshold = (RAND_MAX / 100) * fill;
     vector<tuple<unsigned int, unsigned int>> contents;
     contents.emplace_back(matrix_size, matrix_size);
 
     unsigned int co = 0;
-    for(unsigned int i = 0; i < matrix_size; i++){
-        for(unsigned int j = 0; j < matrix_size; j++){
+    for (unsigned int i = 0; i < matrix_size; i++)
+    {
+        for (unsigned int j = 0; j < matrix_size; j++)
+        {
             unsigned int r = rand();
-            if (r < threshold){
-                contents.emplace_back(i+1, j+1);
+            if (r < threshold)
+            {
+                contents.emplace_back(i + 1, j + 1);
                 co++;
             }
-
         }
     }
-    
-    cout << " DONE!" << endl << "Final fill: " << (double)co/(matrix_size*matrix_size)*100 << "%" << endl << "Warming up..";
-    for(unsigned int i = 0; i < warmup_iterations; i++){
+
+    cout << " DONE!" << endl
+         << "Final fill: " << (double)co / (matrix_size * matrix_size) * 100 << "%" << endl
+         << "Warming up..";
+    for (unsigned int i = 0; i < warmup_iterations; i++)
+    {
         performExperiment<T>(contents, p, epsilon, false);
     }
-    
+
     vector<unsigned long long> times = vector<unsigned long long>();
     unsigned long long total = 0;
-    cout << " DONE!" << endl << "Starting metered iterations..";
-    for(unsigned int i = 0; i < iterations; i++){
+    cout << " DONE!" << endl
+         << "Starting metered iterations..";
+    for (unsigned int i = 0; i < iterations; i++)
+    {
         auto start = std::chrono::high_resolution_clock::now();
-        
+
         performExperiment<T>(contents, p, epsilon, false);
-        
+
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
         unsigned long long micros = duration.count();
@@ -330,11 +344,12 @@ void performTest(unsigned int matrix_size, unsigned int iterations, unsigned int
 
     cout << " DONE!" << endl;
 
-    cout << "Elapsed time: " << total/1000 << "ms" << endl;
-    cout << "Avg time: " << ((double)total)/times.size()/1000 << "ms" << endl;
+    cout << "Elapsed time: " << total / 1000 << "ms" << endl;
+    cout << "Avg time: " << ((double)total) / times.size() / 1000 << "ms" << endl;
     cout << "=============================================" << endl;
     cout << "==TIME VALUES==" << endl;
-    for (unsigned int i = 0; i < times.size(); i++){
+    for (unsigned int i = 0; i < times.size(); i++)
+    {
         cout << times[i] << endl;
     }
 }
@@ -345,7 +360,8 @@ int main(int argc, char *argv[])
 
     if (argc != 3)
     {
-        if (argc == 8 && !strcmp(argv[1],"test")){
+        if (argc == 8 && !strcmp(argv[1], "test"))
+        {
             cout << "[TESTING]" << endl;
             unsigned int size = atoi(argv[2]);
             unsigned int iterations = atoi(argv[3]);
@@ -354,8 +370,9 @@ int main(int argc, char *argv[])
             float p = atof(argv[6]);
             float epsilon = atof(argv[7]);
             performTest<SparseMatrixReloaded>(size, iterations, warmup_iterations, fill, p, epsilon);
-
-        }else{
+        }
+        else
+        {
             cout << argc << endl;
             basicTesting();
             cout << "Parametros invalido (especificar 'p' y archivo de entrada), por lo tanto se corrieron tests de debug" << endl;
@@ -365,58 +382,12 @@ int main(int argc, char *argv[])
 
     double p = atof(argv[2]);
     cout << "P = " << p << endl;
-    // SparseMatrix testMatrix = SparseMatrix(2, 2);
-    // testMatrix[0][0] = 1;
-    // testMatrix[0][1] = 2;
-    // testMatrix[1][0] = 3;
-    // testMatrix[1][1] = 4;
 
-    // cout << "Size: " << testMatrix.Columns() << " x " << testMatrix.Rows() << endl;
-
-    // testMatrix.showMatrix(cout);
     cout << "Archivo: " << argv[1] << endl;
     FileHandler myFile = FileHandler(argv[1]);
 
     vector<tuple<unsigned int, unsigned int>> contents = myFile.readContents();
-    vector<double> result = performExperiment<SparseMatrixReloaded>(contents, p, 0.00000000001, true);    // Con este epsilon los resultados coinciden con los de la catedra
+    vector<double> result = performExperiment<SparseMatrixReloaded>(contents, p, 0.00000000001, true); // Con este epsilon los resultados coinciden con los de la catedra
     myFile.writeOutResult(result, p);
     return 0;
-    /*
-    cout << "===== Matriz Input ====" << endl;
-
-    SparseMatrixReloaded W(contents, 0.0001);
-    W.showMatrix(cout);
-
-    cout << "===== Matriz Identidad ====" << endl;
-    SparseMatrixReloaded identity = buildIdentity(get<0>(contents[0]));
-    identity.showMatrix(cout);
-
-    cout << "===== Matriz D ====" << endl;
-    SparseMatrixReloaded D = buildD<SparseMatrixReloaded>(W);
-    D.showMatrix(cout);
-
-    vector<double> e(get<0>(contents[0]), 1);
-
-    vector<double> res = PageRank(identity, W, D, p, e);
-    cout << "===== PageRank result ====" << endl;
-    cout << "[";
-    for (long unsigned int i = 0; i < res.size(); i++)
-    {
-        cout << res[i] << ", ";
-    }
-    cout << "]" << endl;
-
-    NormalizeResult(&res);
-    cout << "===== Normalized result ====" << endl;
-    cout << "[";
-    for (long unsigned int i = 0; i < res.size(); i++)
-    {
-        cout << res[i] << ", ";
-    }
-    cout << "]" << endl;
-
-    myFile.writeOutResult(res);
-
-    return 0;
-    */
 }
