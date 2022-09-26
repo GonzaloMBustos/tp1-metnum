@@ -501,7 +501,7 @@ void SparseMatrixReloaded::operator*(SparseMatrixReloaded &aMatrix)
     for (unsigned int i = 0; i < this->rows; i++)
     {
         list<SparseMatrixReloaded::ListNode> tmp = list<SparseMatrixReloaded::ListNode>(); // Voy guardando la fila resultante
-        for (unsigned int j = 0; j < this->cols; j++)
+        for (unsigned int j = 0; j < tMatrix.rows; j++)
         {
             list<SparseMatrixReloaded::ListNode>::iterator it1 = this->matrix[i].begin();
             list<SparseMatrixReloaded::ListNode>::iterator it2 = tMatrix.matrix[j].begin();
@@ -534,6 +534,7 @@ void SparseMatrixReloaded::operator*(SparseMatrixReloaded &aMatrix)
         }
         this->matrix[i] = tmp; // ( O(N)! Reemplazo la fila de M1 por la fila resultante
     }
+    this->cols = aMatrix.cols;
 }
 
 void SparseMatrixReloaded::EG(vector<double> &B)

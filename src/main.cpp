@@ -6,6 +6,7 @@
 #include <time.h>
 #include <string.h>
 #include <chrono>
+#include <cmath>
 
 using namespace std;
 
@@ -179,6 +180,21 @@ void basicTesting()
     sm4b42.showMatrix(cout);
 }
 
+double kahanSum(vector<double> &fa)
+{
+    double sum = 0.0;
+    double c = 0.0;
+ 
+    for(double f : fa){
+        double y = f - c;
+        double t = sum + y;
+         
+        c = (t - sum) - y;
+        sum = t;
+    }
+    return sum;
+}
+
 template <typename T>
 T buildIdentity(unsigned int n, double epsilon)
 {
@@ -207,6 +223,27 @@ T buildD(T &W, double epsilon)
 }
 
 template <typename T>
+T buildEZ(T &W, double p, double epsilon)
+{
+    unsigned int n = W.Columns();
+    vector<double> cjs = W.sumColumns();
+    T E(n, 1, epsilon);
+    T Z(1, n, epsilon);
+    for (unsigned int i = 0; i < n; i++)
+    {
+        if (cjs[i] > 0 && ((1-p) / n) > W.Epsilon())
+        {
+            Z.setValue(0, i, ((1-p) / n) );
+        }else if (cjs[i] == 0 && (double(1)/n) > W.Epsilon()){
+            Z.setValue(0, i, (double(1)/n) );
+        }
+        E.setValue(i, 0, 1);
+    }
+    E*Z;
+    return E;
+}
+
+template <typename T>
 vector<double> PageRank(T &I, T &W, T &D, double p, vector<double> &e)
 {
     W *D;
@@ -231,7 +268,7 @@ void NormalizeResult(vector<double> &x)
 }
 
 template <typename T>
-vector<double> performExperiment(vector<tuple<unsigned int, unsigned int>> contents, double p, double epsilon, bool doOutput)
+vector<double> performExperiment(vector<tuple<unsigned int, unsigned int>> contents, double p, double epsilon, bool doOutput, bool doErrorCheck)
 {
 
     T W(contents, epsilon);
@@ -282,12 +319,55 @@ vector<double> performExperiment(vector<tuple<unsigned int, unsigned int>> conte
         }
         cout << "]" << endl;
     }
+
+    //==========CALCULO ERROR |Ax - x|==========
+    if (doErrorCheck)
+    {
+        W = T(contents, epsilon);
+        T EZ = buildEZ<T>(W, p, epsilon);
+        W.multiplyByScalar(p);
+        W * D;
+        W + EZ;
+        
+
+        T resMatrix(res.size(), 1, epsilon);
+        for(unsigned int i = 0; i < res.size(); i++){
+            resMatrix[i+1][1] = res[i];
+        }
+        cout << endl << "=== Matriz A: ===" << endl;
+        W.showMatrix(cout);
+        cout << "=== Vector X': ===" << endl;
+        resMatrix.showMatrix(cout);
+        cout << "=== A*X': ===" << endl;
+        W * resMatrix;
+        W.showMatrix(cout);
+        //cout << "=== A*X' - X': ===" << endl;
+        //resMatrix.multiplyByScalar(-1);
+        //W + resMatrix;
+        //W.showMatrix(cout);
+
+        // NORMA 2
+        vector<double> results(W.Rows(), 0);
+        vector<double> results2(W.Rows(), 0);
+        double acum = 0;
+        double acum2 = 0;
+        for(unsigned int i = 0; i < W.Rows(); i++){
+            results[i] = pow(double(W[i+1][1]), 2);
+            results2[i] = pow(resMatrix[i+1][1], 2);
+        }
+        acum = kahanSum(results);
+        acum2 = kahanSum(results2);
+
+        cout << "ERROR: " << abs(sqrt(acum) - sqrt(acum2)) << endl;
+    }
+
     return res;
 }
 
 template <typename T>
 void performTest(unsigned int matrix_size, unsigned int iterations, unsigned int warmup_iterations, unsigned int fill, float p, float epsilon)
 {
+    bool doErrorCheck = (iterations == 1 && warmup_iterations <= 1);
     cout << "===================================" << endl;
     cout << "Matrix size: " << matrix_size << "x" << matrix_size << endl;
     cout << "Fill: " << fill << "%" << endl;
@@ -295,6 +375,7 @@ void performTest(unsigned int matrix_size, unsigned int iterations, unsigned int
     cout << "Epsilon: " << epsilon << endl;
     cout << "Warmup iterations: " << warmup_iterations << endl;
     cout << "Metered iterations: " << iterations << endl;
+    cout << "Error check: " << doErrorCheck << endl;
     cout << "===================================" << endl;
 
     cout << "Building contents..";
@@ -322,18 +403,19 @@ void performTest(unsigned int matrix_size, unsigned int iterations, unsigned int
          << "Warming up..";
     for (unsigned int i = 0; i < warmup_iterations; i++)
     {
-        performExperiment<T>(contents, p, epsilon, false);
+        performExperiment<T>(contents, p, epsilon, false, doErrorCheck);
     }
 
     vector<unsigned long long> times = vector<unsigned long long>();
     unsigned long long total = 0;
     cout << " DONE!" << endl
          << "Starting metered iterations..";
+    vector<double> res;
     for (unsigned int i = 0; i < iterations; i++)
     {
         auto start = std::chrono::high_resolution_clock::now();
 
-        performExperiment<T>(contents, p, epsilon, false);
+        res = performExperiment<T>(contents, p, epsilon, false, doErrorCheck);
 
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -387,7 +469,7 @@ int main(int argc, char *argv[])
     FileHandler myFile = FileHandler(argv[1]);
 
     vector<tuple<unsigned int, unsigned int>> contents = myFile.readContents();
-    vector<double> result = performExperiment<SparseMatrixReloaded>(contents, p, 0.00000000001, true); // Con este epsilon los resultados coinciden con los de la catedra
+    vector<double> result = performExperiment<SparseMatrixReloaded>(contents, p, 0.00000000001, true, false); // Con este epsilon los resultados coinciden con los de la catedra
     myFile.writeOutResult(result, p);
     return 0;
 }
